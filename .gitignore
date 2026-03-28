@@ -45,3 +45,6 @@ app.*.map.json
 /android/app/release
 
 .desktop-homescreen
+
+# Add your private environment variables here
+.env

@@ -9,7 +9,7 @@ import 'providers/vehicle_provider.dart';
 void main() async{
   final client = ClusterClient(host: '192.168.64.7', port: 50052);
 
-  await dotenv.load(fileName: ".env");
+  //await dotenv.load(fileName: ".env");
 
   runApp(
     ChangeNotifierProvider(

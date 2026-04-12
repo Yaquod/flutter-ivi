@@ -68,38 +68,35 @@ class _TopBarState extends State<TopBar> {
         Expanded(
           child: GlassCard(
             borderRadius: BorderRadius.circular(50),
-            padding: EdgeInsetsGeometry.symmetric(horizontal: 16, vertical: 8),
-            child:  TextField(
-                style: TextStyle(color: Colors.white),
-
-                decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.search, color: Color(0xff666666)),
-
-                  hintText: "Search",
-
-                  hintStyle: GoogleFonts.inter(
-                    textStyle: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w400,
-                      color: Color(0xff666666),
-                    ),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: TextField(
+              style: const TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                prefixIcon: const Icon(
+                  Icons.search,
+                  color: Color(0xff666666),
+                ),
+                hintText: "Search",
+                hintStyle: GoogleFonts.inter(
+                  textStyle: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                    color: Color(0xff666666),
                   ),
-
-                  border: InputBorder.none,
-
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(50),
-                    borderSide: BorderSide.none,
-                  ),
-
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(50),
-                    borderSide: BorderSide.none,
-                  ),
+                ),
+                border: InputBorder.none,
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(50),
+                  borderSide: BorderSide.none,
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(50),
+                  borderSide: BorderSide.none,
                 ),
               ),
             ),
           ),
+        ),
 
         const SizedBox(width: 160),
 

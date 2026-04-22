@@ -19,19 +19,14 @@ class FanSpeedBar extends StatefulWidget {
 class _FanSpeedBarState extends State<FanSpeedBar> {
   bool _isHovered = false;
 
-  //static const double widthBar  = 100.0;
-  // static const double heightBar = 60.0;
+  static const double widthBar  = 100.0;
+  static const double heightBar = 60.0;
    static const double radiusBar = 8.0;
 
   @override
   Widget build(BuildContext context) {
 
-    final screenWidth  = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-
-    final double widthBar  = screenWidth  * 0.078; // ~100px on 1280px screen
-    final double heightBar = screenHeight * 0.067; // ~60px on 900px screen
-
+    
 
 
     final bool isPressed = widget.isActive;
@@ -48,8 +43,8 @@ class _FanSpeedBarState extends State<FanSpeedBar> {
         onExit:  (_) => setState(() => _isHovered = false),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 300),
-          width:  widthBar,
-          height: heightBar,
+          width: widthBar,
+          height:heightBar,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(radiusBar),
             border: Border.all(color: borderColor, width: 1.0),
@@ -59,7 +54,7 @@ class _FanSpeedBarState extends State<FanSpeedBar> {
             child: Stack(
               children: [
 
-                // ── Layer 1: gradient background desault state ──────────────────
+                // ── Layer 1: gradient background default state ──────────────────
                 Positioned.fill(
                   child: Container(
                     decoration: BoxDecoration(
@@ -81,8 +76,8 @@ class _FanSpeedBarState extends State<FanSpeedBar> {
                   alignment: Alignment.bottomCenter,
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 300),
-                    width:  widthBar,
-                    height: isPressed ? heightBar : 0,
+                    width:  double.infinity,
+                    height: isPressed ? heightBar: 0,
                     color:  AppColor.action_color,
                   ),
                 ),
@@ -112,39 +107,37 @@ class _FanSpeedSelectorState extends State<FanSpeedSelector> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-
-        // ── Label ──────────────────────────────────────────────
         Text(
           'Fan Speed',
-          style: TextStyle(
+          style: const TextStyle(
             color: AppColor.secondary_text_dark,
             fontSize: 14,
             fontWeight: FontWeight.w400,
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 6),
 
-        // ── 5 bars ─────────────────────────────────────────────
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: List.generate(5, (index) {
-            final level = index + 1;
-            final double gap = MediaQuery.of(context).size.width * 0.006; // ~8px on 1280px
+        Expanded(
 
-            return Padding(
-              padding: EdgeInsets.only(right: index < 4 ? gap : 0),
-              child: FanSpeedBar(
-                isActive: _selectedLevel >= level,
-                onTap: () => setState(() => _selectedLevel = level),
-              ),
-            );
-          }),
+          child: Row(
+            children: List.generate(5, (index) {
+              final level = index + 1;
+
+              return Expanded(
+                child: Padding(
+                  padding: EdgeInsets.only(right: index < 4 ? 8 : 0),
+                  child: FanSpeedBar(
+                    isActive: _selectedLevel >= level,
+                    onTap: () => setState(() => _selectedLevel = level),
+                  ),
+                ),
+              );
+            }),
+          ),
         ),
-
       ],
     );
   }
 }
-
 
 

@@ -58,6 +58,7 @@ class _MainScreenState extends State<MainScreen> {
                 child: BottomNav(
                   currentIndex: _currentIndex,
                   onTap: (index) {
+                 
                     setState(() {
                       _currentIndex = index;
                     });

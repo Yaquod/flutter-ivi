@@ -47,4 +47,4 @@ app.*.map.json
 .desktop-homescreen
 
 # Add your private environment variables here
-.env
+.env.codex

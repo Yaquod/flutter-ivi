@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ivi/constants/app_color.dart';
 import 'package:flutter_ivi/ui_components/new_card.dart';
-import 'package:flutter_ivi/widgets/responsive_layout.dart';
 
 class LockIconButton extends StatefulWidget {
   final bool isLocked;
@@ -18,60 +17,71 @@ class LockIconButtonState extends State<LockIconButton> {
 
   @override
   Widget build(BuildContext context) {
-    final r = ResponsiveLayout.of(context);
-
+    //icon color
     final Color iconColor = widget.isLocked
-        ? AppColor.action_color
-        : AppColor.icon_dark_gray;
-
+        ? AppColor
+              .action_color //pressed
+        : AppColor.icon_dark_gray; //default
     return GestureDetector(
-       onTap: widget.onTap,
+      onTap: widget.onTap,
+
       child: MouseRegion(
         onEnter: (_) => setState(() => _isHovered = true),
-        onExit:  (_) => setState(() => _isHovered = false),
+        onExit: (_) => setState(() => _isHovered = false),
+
         child: Stack(
-            alignment: Alignment.center,
-            children: [
+          alignment: Alignment.center,
+          children: [
+            //default state
+            GlassCard(
+              width: 48,
+              height: 48,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(48),
+                topRight: Radius.circular(48),
+                bottomLeft: Radius.circular(48),
+                bottomRight: Radius.circular(48),
+              ),
+            ),
 
-              GlassCard(width: r.w(48), height: r.h(48), borderRadius: r.sp(48)),
+            //icon
+            Icon(
+              widget.isLocked ? Icons.lock : Icons.lock_open,
+              color: iconColor,
+              size: 22,
+            ),
 
-              Icon(
-                widget.isLocked ? Icons.lock : Icons.lock_open,
-                color: iconColor,
-                size: r.iconSm,
+            // hover state
+            if (_isHovered || widget.isLocked)
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: AppColor.action_color, width: 1),
+                ),
               ),
 
-              if (_isHovered || widget.isLocked)
-                Container(
-                  width:  r.w(48),
-                  height: r.h(48),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                     color : AppColor.action_color,
-                     width: 1,
-                    ),
-                  ),
-                ),
-
-                if(widget.isLocked)
-                Container(
-                  width:  r.w(48),
-                  height: r.h(48),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColor.action_color.withOpacity(0.1),
-                    boxShadow: [BoxShadow(
+            //pressed state
+            if (widget.isLocked)
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColor.action_color.withOpacity(0.1),
+                  boxShadow: [
+                    BoxShadow(
                       color: AppColor.action_color.withOpacity(.5),
                       offset: Offset(0, 0),
-                      blurRadius: r.sp(4),
-                       spreadRadius: r.sp(2),
-                    )
-                    ]
-                  ),
+                      blurRadius: 4,
+                      spreadRadius: 2,
+                    ),
+                  ],
                 ),
-            ],
-          ),
+              ),
+          ],
+        ),
       ),
     );
   }

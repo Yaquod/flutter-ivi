@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ivi/ui_components/new_card.dart';
 import 'package:flutter_ivi/ui_components/gear_selector.dart';
+import 'package:flutter_ivi/ui_components/traffic_lights.dart';
+import 'package:flutter_ivi/ui_components/indicators.dart';
+import 'package:flutter_ivi/ui_components/navigation_message.dart';
 import 'package:flutter_ivi/constants/app_color.dart';
 import 'package:provider/provider.dart';
 import '../providers/vehicle_provider.dart';
@@ -116,30 +119,154 @@ class ClusterView extends StatelessWidget {
     final mode = frame.controlMode.name.replaceFirst('MODE_', '');
     final battery = frame.batteryPct;
     final isMrm = frame.mrm.isActive;
-    final turnSignal = frame.turnSignal.value;
+    final turnSignal = frame.turnSignal.value; // 0=none 1=left 2=right
+
+    final control_mode = frame.controlMode.value;
 
     return Scaffold(
       backgroundColor: const Color(0xFF0A0A0F),
-      body: SafeArea(
-        child: Column(
+      body: Center(
+        child: Stack(
           children: [
-            // ── Top bar ──
-            TopBar(gear: 'D', hazard: false),
-            const SizedBox(height: 8),
-
-            Expanded(
-              flex: 5,
-              child: _Speedometer(speed: speed, turnSignal: turnSignal),
+            //blue light
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: Image.asset(
+                  'assets/images/blue_light.png',
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
 
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: r.w(24)),
-              child: _InfoRow(frame: frame, gear: gear, battery: battery),
-            ),
-            SizedBox(height: r.h(12)),
+            //road
+            Positioned(
+              top: 300,
+              left: 0,
+              right: 0,
 
-            _BottomStrip(frame: frame),
-            SizedBox(height: r.h(16)),
+              child: Image.asset('assets/images/road.png', fit: BoxFit.cover),
+            ),
+
+            //top bar
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: TopBar(gear: 'D', hazard: true),
+            ),
+
+            //left , right indicators
+            Positioned(
+              top: 60,
+              left: 350,
+              right: 350,
+              child: TurnSignalIndicator(turnSignal: 2),
+            ),
+            
+            //navigation message
+            Positioned(
+              top: 140,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: NavMessage(
+                  turnDirection: 1,
+                  distanceM: 500,
+                ),
+              ),
+            ),
+
+            //speed
+            Positioned(top: 140, left: 120, child: build_display(127, 'KM/H')),
+
+            //energy
+            Positioned(top: 140, right: 120, child: build_display(3.4, 'KM/H')),
+
+            //middle car
+            Positioned(
+              bottom: 120,
+              left: 0,
+              right: 0,
+
+              child: Center(
+                child: Image.asset(
+                  'assets/images/car_middle.png',
+                  width: 160,
+                  height: 130,
+                ),
+              ),
+            ),
+
+            //truck
+            Positioned(
+              bottom: 240,
+              right: 260,
+
+              child: Image.asset(
+                'assets/images/truck.png',
+                width: 200,
+                height: 160,
+              ),
+            ),
+
+            //left car
+            Positioned(
+              bottom: 240,
+              left: 300,
+
+              child: Image.asset(
+                'assets/images/left_car.png',
+                width: 154,
+                height: 90,
+              ),
+            ),
+
+            //left card information
+            Positioned(
+              left: 24,
+              bottom: 100,
+              child: LeftCardInfo(
+                acc: 4.03,
+                max_speed: 80,
+                target_speed: 100,
+                yaw_rate: 20.3,
+              ),
+            ),
+
+            //right card information
+            Positioned(
+              right: 24,
+              bottom: 100,
+              child: RightCarfIngo(
+                eta_distance: 300,
+                eta_time: 200,
+                mrm: 'Normal',
+                odometer: 25.00,
+              ),
+            ),
+
+            //bottom bar
+            Positioned(
+              bottom: 16,
+              left: 24,
+              right: 24,
+              child: Center(
+                child: BottomBar(
+                  battery: 86,
+                  car_count: 3,
+                  control_mode: 2,
+                  motion_state: 2,
+                  obstacle_count: 3,
+                  pedstrain_count: 4,
+                  TL_green: true,
+                  TL_red: false,
+                  TL_yellow: false,
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -175,8 +302,8 @@ class TopBar extends StatelessWidget {
         Stack(
           children: [
             GlassCard(
-              width: 1440,
-              height: 48,
+              width: 1243,
+              height: 40,
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(100),
                 bottomRight: Radius.circular(100),
@@ -196,13 +323,13 @@ class TopBar extends StatelessWidget {
                       children: [
                         //time value 
                         Text(
-                      '12:15',
-                      style: TextStyle(
-                        color : AppColor.primary_text_dark,
-                        fontFamily: 'Nasalization',
-                        fontSize: 20,
-                      ),
-                     ),
+                          '12:15',
+                          style: TextStyle(
+                            color: AppColor.primary_text_dark,
+                            fontFamily: 'Nasalization',
+                            fontSize: 16,
+                          ),
+                        ),
 
                      SizedBox(width: 4),
                       //unit
@@ -226,24 +353,24 @@ class TopBar extends StatelessWidget {
                       children: [
                        //temerature vale 
                         Text(
-                      '27',
-                      style: TextStyle(
-                        color : AppColor.primary_text_dark,
-                        fontFamily: 'Nasalization',
-                        fontSize: 20,
-                      ),
-                     ),
+                          '27',
+                          style: TextStyle(
+                            color: AppColor.primary_text_dark,
+                            fontFamily: 'Nasalization',
+                            fontSize: 16,
+                          ),
+                        ),
 
-                     SizedBox(width: 4),
-                      //unit
-                     Text(
-                      'C',
-                      style: TextStyle(
-                        color : AppColor.primary_text_dark,
-                        fontFamily: 'Nasalization',
-                        fontSize: 20,
-                      ),
-                     )
+                        SizedBox(width: 4),
+                        //unit
+                        Text(
+                          'C',
+                          style: TextStyle(
+                            color: AppColor.primary_text_dark,
+                            fontFamily: 'Nasalization',
+                            fontSize: 16,
+                          ),
+                        ),
                       ],
                     )
 
@@ -268,7 +395,7 @@ class TopBar extends StatelessWidget {
               alignment: Alignment.center,
               child: GlassCard(
                 width: 400,
-                height: 75,
+                height: 70,
                 borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(100),
                 bottomRight: Radius.circular(100),
@@ -287,397 +414,386 @@ class TopBar extends StatelessWidget {
   }
 }
 
-// class _TopBar extends StatelessWidget {
-//   final String mode;
-//   final bool isMrm;
-//   final int seq;
-//   const _TopBar({required this.mode, required this.isMrm, required this.seq});
+//bottom bar
+class BottomBar extends StatelessWidget {
+  final double battery;
+  final int control_mode; //(AUTO = 2 /MANUAL = 1 /NONE = 0)
+  final int
+  motion_state; //(STOPPED = 1 /MOVING = 2 /DECELERATING = 3 /NONE = 0)
+  final int car_count;
+  final int obstacle_count;
+  final int pedstrain_count;
+  final bool TL_red;
+  final bool TL_green;
+  final bool TL_yellow;
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Padding(
-//       padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
-//       child: Row(
-//         children: [
-//           // Mode badge
-//           Container(
-//             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-//             decoration: BoxDecoration(
-//               border: Border.all(color: mode == 'AUTO'
-//                   ? const Color(0xFF00E5FF)
-//                   : const Color(0xFF666680), width: 1),
-//               borderRadius: BorderRadius.circular(4),
-//             ),
-//             child: Text(mode, style: TextStyle(
-//               color: mode == 'AUTO' ? const Color(0xFF00E5FF) : const Color(0xFF888899),
-//               fontSize: 11,
-//               letterSpacing: 3,
-//               fontFamily: 'monospace',
-//               fontWeight: FontWeight.w600,
-//             )),
-//           ),
-//           const Spacer(),
-//           // MRM warning
-//           if (isMrm)
-//             Container(
-//               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-//               decoration: BoxDecoration(
-//                 color: const Color(0x33FF3D57),
-//                 border: Border.all(color: const Color(0xFFFF3D57), width: 1),
-//                 borderRadius: BorderRadius.circular(4),
-//               ),
-//               child: const Text('⚠ MRM ACTIVE', style: TextStyle(
-//                 color: Color(0xFFFF3D57),
-//                 fontSize: 11,
-//                 letterSpacing: 2,
-//                 fontFamily: 'monospace',
-//                 fontWeight: FontWeight.w700,
-//               )),
-//             ),
-//           const Spacer(),
-//           // Frame counter
-//           Text('# ${seq.toString().padLeft(6, '0')}', style: const TextStyle(
-//             color: Color(0x44FFFFFF),
-//             fontSize: 10,
-//             letterSpacing: 1,
-//             fontFamily: 'monospace',
-//           )),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
-// ── Speedometer ───────────────────────────────────────────────────────────────
-
-class _Speedometer extends StatelessWidget {
-  final double speed;
-  final int turnSignal;
-  const _Speedometer({required this.speed, required this.turnSignal});
+  const BottomBar({
+    super.key,
+    required this.battery,
+    required this.car_count,
+    required this.control_mode,
+    required this.motion_state,
+    required this.obstacle_count,
+    required this.pedstrain_count,
+    required this.TL_green,
+    required this.TL_red,
+    required this.TL_yellow,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final size =
-            math.min(constraints.maxWidth, constraints.maxHeight) * 0.85;
-        return Stack(
-          alignment: Alignment.center,
+    return GlassCard(
+      height: 60,
+      width: 1400,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: Row(
           children: [
-            // Arc painter
-            SizedBox(
-              width: size,
-              height: size,
-              child: CustomPaint(
-                painter: _ArcPainter(speed: speed, maxSpeed: 180),
+            //left row
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  build_battery(),
+                  const SizedBox(width: 48),
+                  build_control_mode(control_mode),
+                  const SizedBox(width: 48),
+                  build_motion_state(motion_state),
+                ],
               ),
             ),
-            // Speed number
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const SizedBox(height: 24),
-                Text(
-                  speed.toStringAsFixed(0),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 72,
-                    fontWeight: FontWeight.w200,
-                    fontFamily: 'monospace',
-                    height: 1,
+
+            //traffic lights
+            Center(child: buildTrafficLight(TL_red, TL_yellow, TL_green)),
+
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  //car count
+                  build_icon('assets/icons/car.svg', 25, 20, car_count),
+                  SizedBox(width: 30),
+                  //obstacle count
+                  build_icon(
+                    'assets/icons/obstacle.svg',
+                    25,
+                    20,
+                    obstacle_count,
                   ),
-                ),
-                const Text(
-                  'km/h',
-                  style: TextStyle(
-                    color: Color(0x88FFFFFF),
-                    fontSize: 13,
-                    letterSpacing: 3,
-                    fontFamily: 'monospace',
+                  SizedBox(width: 30),
+                  //pedstrain count
+                  build_icon(
+                    'assets/icons/pedstrain.svg',
+                    25,
+                    20,
+                    pedstrain_count,
                   ),
-                ),
-                const SizedBox(height: 8),
-                // Turn signal indicators
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.arrow_back_ios,
-                      size: 16,
-                      color: turnSignal == 1
-                          ? const Color(0xFF00FF88)
-                          : const Color(0x22FFFFFF),
-                    ),
-                    const SizedBox(width: 8),
-                    Icon(
-                      Icons.arrow_forward_ios,
-                      size: 16,
-                      color: turnSignal == 2
-                          ? const Color(0xFF00FF88)
-                          : const Color(0x22FFFFFF),
-                    ),
-                  ],
-                ),
-              ],
+                ],
+              ),
             ),
           ],
-        );
-      },
-    );
-  }
-}
-
-class _ArcPainter extends CustomPainter {
-  final double speed;
-  final double maxSpeed;
-  const _ArcPainter({required this.speed, required this.maxSpeed});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final center = Offset(size.width / 2, size.height / 2);
-    final radius = size.width / 2 - 8;
-    const startAngle = math.pi * 0.75;
-    const sweepAngle = math.pi * 1.5;
-
-    canvas.drawArc(
-      Rect.fromCircle(center: center, radius: radius),
-      startAngle,
-      sweepAngle,
-      false,
-      Paint()
-        ..color = const Color(0x22FFFFFF)
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 3
-        ..strokeCap = StrokeCap.round,
-    );
-
-    final fill = (speed / maxSpeed).clamp(0.0, 1.0);
-    if (fill > 0) {
-      final gradient = SweepGradient(
-        startAngle: startAngle,
-        endAngle: startAngle + sweepAngle * fill,
-        colors: const [Color(0xFF00E5FF), Color(0xFF00FF88)],
-      ).createShader(Rect.fromCircle(center: center, radius: radius));
-
-      canvas.drawArc(
-        Rect.fromCircle(center: center, radius: radius),
-        startAngle,
-        sweepAngle * fill,
-        false,
-        Paint()
-          ..shader = gradient
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 4
-          ..strokeCap = StrokeCap.round,
-      );
-    }
-
-    for (int i = 0; i <= 9; i++) {
-      final angle = startAngle + sweepAngle * (i / 9);
-      final isMajor = i % 3 == 0;
-      final outer =
-          center + Offset(math.cos(angle), math.sin(angle)) * (radius - 10);
-      final inner =
-          center +
-          Offset(math.cos(angle), math.sin(angle)) *
-              (radius - (isMajor ? 22 : 16));
-      canvas.drawLine(
-        outer,
-        inner,
-        Paint()
-          ..color = isMajor ? const Color(0x88FFFFFF) : const Color(0x33FFFFFF)
-          ..strokeWidth = isMajor ? 2 : 1,
-      );
-    }
-  }
-
-  @override
-  bool shouldRepaint(_ArcPainter old) => old.speed != speed;
-}
-
-class _InfoRow extends StatelessWidget {
-  final VehicleFrame frame;
-  final String gear;
-  final double battery;
-  const _InfoRow({
-    required this.frame,
-    required this.gear,
-    required this.battery,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        _InfoTile(label: 'GEAR', value: gear, accent: const Color(0xFF00E5FF)),
-        _InfoTile(
-          label: 'BATTERY',
-          value: '${(battery * 100).toStringAsFixed(0)}%',
-          accent: battery < 0.2
-              ? const Color(0xFFFF3D57)
-              : const Color(0xFF00FF88),
         ),
-        _InfoTile(
-          label: 'OBJECTS',
-          value: '${frame.surroundObjects.length}',
-          accent: const Color(0xFFFFB800),
-        ),
-        _InfoTile(
-          label: 'ETA',
-          value: '${frame.eta.remainingTimeS.toStringAsFixed(0)}s',
-          accent: const Color(0xFF00E5FF),
-        ),
-      ],
-    );
-  }
-}
-
-class _InfoTile extends StatelessWidget {
-  final String label;
-  final String value;
-  final Color accent;
-  const _InfoTile({
-    required this.label,
-    required this.value,
-    required this.accent,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final r = ResponsiveLayout.of(context);
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          value,
-          style: TextStyle(
-            color: accent,
-            fontSize: 22,
-            fontWeight: FontWeight.w300,
-            fontFamily: 'monospace',
-          ),
-        ),
-        const SizedBox(height: 2),
-        Text(
-          label,
-          style: const TextStyle(
-            color: Color(0x55FFFFFF),
-            fontSize: 9,
-            letterSpacing: 2,
-            fontFamily: 'monospace',
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _BottomStrip extends StatelessWidget {
-  final VehicleFrame frame;
-  const _BottomStrip({required this.frame});
-
-  @override
-  Widget build(BuildContext context) {
-    final r = ResponsiveLayout.of(context);
-    final hasRed = frame.adas.trafficLightRed;
-    final hasGreen = frame.adas.trafficLightGreen;
-    final hasYellow = frame.adas.trafficLightYellow;
-
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: r.w(20)),
-      padding: EdgeInsets.symmetric(horizontal: r.w(16), vertical: r.h(10)),
-      decoration: BoxDecoration(
-        color: const Color(0x0FFFFFFF),
-        borderRadius: BorderRadius.circular(r.sp(8)),
-        border: Border.all(color: const Color(0x15FFFFFF)),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    );
+  }
+
+  Row build_icon(String icon_path, double icon_w, double icon_h, int count) {
+    return Row(
+      children: [
+        //car icon
+        SvgPicture.asset(
+          '$icon_path',
+          width: icon_w,
+          height: icon_h,
+          colorFilter: ColorFilter.mode(
+            AppColor.icon_dark_white,
+            BlendMode.srcIn,
+          ),
+        ),
+
+        //vertical line
+        Container(
+          height: 20,
+          child: VerticalDivider(color: AppColor.action_color, thickness: 1),
+        ),
+
+        //car count
+        Text(
+          '$count',
+          style: TextStyle(
+            color: AppColor.action_color,
+            fontFamily: 'Nasalization',
+            fontSize: 18,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Row build_battery() {
+    return Row(
+      children: [
+        //battery icon
+        SvgPicture.asset(
+          'assets/icons/battery.svg',
+          width: 50,
+          height: 30,
+          colorFilter: ColorFilter.mode(
+            AppColor.icon_dark_white,
+            BlendMode.srcIn,
+          ),
+        ),
+        SizedBox(width: 4),
+        //battery level
+        Text(
+          '$battery%',
+          style: TextStyle(
+            color: AppColor.icon_dark_white,
+            fontFamily: 'Nasalization',
+            fontSize: 14,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Text build_control_mode(int v) {
+    String mode = '';
+    switch (v) {
+      case 1:
+        mode = 'MANUAL';
+        break;
+      case 2:
+        mode = 'AUTO';
+        break;
+      default:
+        mode = '';
+    }
+    return Text(
+      '$mode',
+      style: TextStyle(
+        color: AppColor.action_color,
+        fontFamily: 'inter',
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
+      ),
+    );
+  }
+
+  Row build_motion_state(int v) {
+    String motion = '';
+    switch (v) {
+      case 1:
+        motion = 'STOPPED';
+        break;
+      case 2:
+        motion = 'MOVING';
+        break;
+      case 3:
+        motion = 'DECELERATING';
+        break;
+      default:
+        motion = '';
+    }
+    return Row(
+      children: [
+        if (v == 1 || v == 2 || v == 3)
+          SvgPicture.asset(
+            'assets/icons/blue_filled_circle.svg',
+            width: 20,
+            height: 20,
+          ),
+
+        SizedBox(width: 8),
+
+        Text(
+          '$motion',
+          style: TextStyle(
+            color: AppColor.action_color,
+            fontFamily: 'inter',
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+//right card information
+
+class RightCarfIngo extends StatelessWidget {
+  final double eta_distance;
+  final double eta_time;
+  final double odometer;
+  final String mrm;
+  const RightCarfIngo({
+    super.key,
+    required this.eta_distance,
+    required this.eta_time,
+    required this.mrm,
+    required this.odometer,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GlassCard(
+      width: 200,
+      height: 350,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(24, 24, 0, 0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: build_info('Estimated Distance', eta_distance, 'm'),
+            ),
+
+            build_light_line(),
+
+            Expanded(child: build_info('Estimated Time', eta_time, 's')),
+
+            build_light_line(),
+
+            Expanded(child: build_info('Odometer', odometer, 'm')),
+
+            build_light_line(),
+
+            Expanded(child: build_info('MRM', mrm, '')),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// left card information
+
+class LeftCardInfo extends StatelessWidget {
+  final double acc;
+  final double target_speed;
+  final double max_speed;
+  final double yaw_rate;
+
+  const LeftCardInfo({
+    super.key,
+    required this.acc,
+    required this.max_speed,
+    required this.target_speed,
+    required this.yaw_rate,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GlassCard(
+      width: 200,
+      height: 350,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(24, 24, 0, 0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(child: build_info('Acceleration', acc, 'KM/H')),
+
+            build_light_line(),
+
+            Expanded(child: build_info('Target Speed', target_speed, 'm/s')),
+
+            build_light_line(),
+
+            Expanded(child: build_info('Max Speed', max_speed, 'm/s')),
+
+            build_light_line(),
+
+            Expanded(child: build_info('Yaw Rate', yaw_rate, 'Rad/s')),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+Image build_light_line() {
+  return Image.asset(
+    'assets/images/light_line.png',
+    width: 180,
+    height: 20,
+    fit: BoxFit.fitWidth,
+  );
+}
+
+Column build_info(String label, dynamic value, String unit) {
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.start,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        '$label',
+        style: TextStyle(
+          color: AppColor.secondary_text_dark,
+          fontSize: 14,
+          fontFamily: 'inter',
+          fontWeight: FontWeight.w200,
+        ),
+      ),
+
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.baseline,
+        textBaseline: TextBaseline.alphabetic,
         children: [
-          // Speed limit
-          _Strip(
-            label: 'LIMIT',
-            value: '${(frame.speedLimitMps * 3.6).toStringAsFixed(0)} km/h',
+          Text(
+            '$value',
+            style: TextStyle(
+              color: AppColor.action_color,
+              fontFamily: 'Nasalization',
+              fontSize: 20,
+            ),
           ),
-          // Target speed
-          _Strip(
-            label: 'TARGET',
-            value: '${(frame.targetSpeedMps * 3.6).toStringAsFixed(0)} km/h',
-          ),
-          // Traffic lights
-          Row(
-            children: [
-              _TrafficDot(color: const Color(0xFFFF3D57), active: hasRed),
-              const SizedBox(width: 4),
-              _TrafficDot(color: const Color(0xFFFFB800), active: hasYellow),
-              const SizedBox(width: 4),
-              _TrafficDot(color: const Color(0xFF00FF88), active: hasGreen),
-            ],
-          ),
-          // Distance
-          _Strip(
-            label: 'DIST',
-            value:
-                '${(frame.eta.remainingDistanceM / 1000).toStringAsFixed(2)} km',
+
+          SizedBox(width: 4),
+
+          Text(
+            '$unit',
+            style: TextStyle(
+              color: AppColor.secondary_text_dark,
+              fontFamily: 'inter',
+              fontSize: 12,
+              fontWeight: FontWeight.w200,
+            ),
           ),
         ],
       ),
-    );
-  }
+    ],
+  );
 }
 
-class _Strip extends StatelessWidget {
-  final String label;
-  final String value;
-  const _Strip({required this.label, required this.value});
-  @override
-  Widget build(BuildContext context) {
-    final r = ResponsiveLayout.of(context);
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          value,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 13,
-            fontFamily: 'monospace',
-            fontWeight: FontWeight.w400,
-          ),
-        ),
-        Text(
-          label,
-          style: const TextStyle(
-            color: Color(0x44FFFFFF),
-            fontSize: 8,
-            letterSpacing: 2,
-            fontFamily: 'monospace',
-          ),
-        ),
-      ],
-    );
-  }
-}
+//speed  and energy
 
-class _TrafficDot extends StatelessWidget {
-  final Color color;
-  final bool active;
-  const _TrafficDot({required this.color, required this.active});
-  @override
-  Widget build(BuildContext context) {
-    final r = ResponsiveLayout.of(context);
-    return Container(
-      width: 10,
-      height: 10,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: active ? color : color.withOpacity(0.15),
-        boxShadow: active
-            ? [BoxShadow(color: color.withOpacity(0.6), blurRadius: 6)]
-            : null,
+Row build_display(double val, String unit) {
+  return Row(
+    crossAxisAlignment: CrossAxisAlignment.baseline,
+    textBaseline: TextBaseline.alphabetic,
+    children: [
+      //value
+      Text(
+        '$val',
+        style: TextStyle(
+          color: AppColor.primary_text_dark,
+          fontFamily: 'Nasalization',
+          fontSize: 70,
+        ),
       ),
-    );
-  }
+
+      //unit
+      Text(
+        '$unit',
+        style: TextStyle(
+          color: AppColor.secondary_text_dark,
+          fontFamily: 'inter',
+          fontSize: 15,
+          fontWeight: FontWeight.w200,
+        ),
+      ),
+    ],
+  );
 }

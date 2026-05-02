@@ -73,7 +73,7 @@ final rrect = borderRadius.toRRect(
       rect: rect,
       globalOpacity: 0.5,
       center: Alignment(-0.8, -0.8),
-      radius: 8.0,
+      radius: 10.0,
       color: Color(0xFF0938DF),
       opacity: 1.0,
     );
@@ -85,7 +85,7 @@ final rrect = borderRadius.toRRect(
       rect: rect,
       globalOpacity: 0.5,
       center: Alignment(0.8, 0.8),
-      radius: 8.0,
+      radius: 10.0,
       color: AppColor.action_color,
       opacity: 1.0,
     );
@@ -97,7 +97,7 @@ final rrect = borderRadius.toRRect(
       rect: rect,
       globalOpacity: 0.3,
       center: Alignment(-0.8, -0.8),
-      radius: 5.0,
+      radius: 10.0,
       color: Color(0xFFFFFFFF),
       opacity: 1.0,
     );
@@ -109,7 +109,7 @@ final rrect = borderRadius.toRRect(
       rect: rect,
       globalOpacity: 0.3,
       center: Alignment(0.8, 0.8),
-      radius: 5.0,
+      radius: 10.0,
       color: Color(0xFFFFFFFF),
       opacity: 1.0,
     );
@@ -128,7 +128,7 @@ void _drawGradientStroke({
   required Color color,
   required double opacity,
   required double globalOpacity,
-  double strokeWidth = 2.0,
+  double strokeWidth = 1.0,
 }) {
   final paint = Paint()
     ..style = PaintingStyle.stroke

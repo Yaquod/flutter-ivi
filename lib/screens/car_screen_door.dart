@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ivi/constants/app_color.dart';
 import 'package:flutter_ivi/ui_components/circular_progress.dart';
 import 'package:flutter_ivi/ui_components/car_top_view_animated.dart';
-
-// ─── Door Position ────────────────────────────────────────────────────────────
+import 'package:flutter_ivi/widgets/responsive_layout.dart';
 
 enum DoorPosition { driverFront, passengerFront, driverRear, passengerRear }
 
@@ -18,16 +17,12 @@ extension DoorPositionLabel on DoorPosition {
   }
 }
 
-// ─── Door State ───────────────────────────────────────────────────────────────
-
 class DoorState {
   bool isLocked;
   double windowPercent;
 
   DoorState({this.isLocked = false, this.windowPercent = 0.5});
 }
-
-// ─── Doors Page ───────────────────────────────────────────────────────────────
 
 class DoorsPage extends StatefulWidget {
   const DoorsPage({super.key});
@@ -54,20 +49,19 @@ class _DoorsPageState extends State<DoorsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
     final current = _doors[_selected]!;
 
     return Padding(
-      padding: const EdgeInsets.all(24),
+      padding: r.edgeInsetsAll(24),
       child: Column(
         children: [
 
-          // car top view and window control 
           Expanded(
             flex:15,
             child: Row(
               children: [
 
-              //car animated top view 
                 Expanded(
                   flex: 6,
                   child: CarTopView(
@@ -81,11 +75,10 @@ class _DoorsPageState extends State<DoorsPage> {
 
                 Spacer(flex: 1),
 
-                //window control pannel
                 Expanded(
                   flex: 4,
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 32, 0),
+                    padding: r.edgeInsetsOnly(r: 32),
                     child: _WindowControlPanel(
                       label: _selected.label,
                       doorState: current,
@@ -101,18 +94,15 @@ class _DoorsPageState extends State<DoorsPage> {
             ),
           ),
 
-         // const SizedBox(height: 24),
          Spacer(flex:1),
 
-          // ── Bottom buttons ──────────────────────────────────
           Expanded(
             flex:2,
             child: Row(
-              
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 _BottomButton(label: 'Lock all Doors',   onTap: _lockAllDoors),
-                const SizedBox(width: 16),
+                SizedBox(width: r.w(16)),
                 _BottomButton(label: 'Lock all Windows', onTap: _closeAllWindows),
               ],
             ),
@@ -123,12 +113,6 @@ class _DoorsPageState extends State<DoorsPage> {
     );
   }
 }
-
-
-
-
-
-// ─── Window Control Panel ─────────────────────────────────────────────────────
 
 class _WindowControlPanel extends StatelessWidget {
   final String label;
@@ -147,39 +131,37 @@ class _WindowControlPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
     final int percent = (doorState.windowPercent * 100).round();
 
-    return  Column(
+    return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-      
-         //label
-          const Text(
+
+          Text(
             'Window Control',
             style: TextStyle(
               color: AppColor.primary_text_dark,
-              fontSize: 22,
+              fontSize: r.sp(22),
               fontWeight: FontWeight.w600,
             ),
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: r.h(4)),
           Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColor.secondary_text_dark,
-              fontSize: 14,
+              fontSize: r.sp(14),
             ),
           ),
-      
-          const SizedBox(height: 24),
-      
-          // circular progress
-           CircularProgress(Val: doorState.windowPercent, percent: percent),
-      
-          const SizedBox(height: 24),
-      
-          //slider
+
+          SizedBox(height: r.h(24)),
+
+          CircularProgress(Val: doorState.windowPercent, percent: percent),
+
+          SizedBox(height: r.h(24)),
+
           Expanded(
             child: SliderTheme(
               data: SliderThemeData(
@@ -187,7 +169,7 @@ class _WindowControlPanel extends StatelessWidget {
                 inactiveTrackColor: AppColor.card_second_dark.withOpacity(0.25),
                 thumbColor:         AppColor.action_color,
                 overlayColor:       AppColor.action_color.withOpacity(0.20),
-                trackHeight: 4,
+                trackHeight: r.h(4),
               ),
               child: Slider(
                 value: doorState.windowPercent,
@@ -197,35 +179,31 @@ class _WindowControlPanel extends StatelessWidget {
               ),
             ),
           ),
-      
-          const SizedBox(height: 24),
-      
-          // ── Open / Close buttons ──────────────────────────
+
+          SizedBox(height: r.h(24)),
+
           Row(
             children: [
               Expanded(
                 child: SizedBox(
-                  height: 56,
+                  height: r.h(56),
                   child: _ActionButton(label: 'Open',  onTap: onOpen),
                 ),
               ),
-              const SizedBox(width: 16),
+              SizedBox(width: r.w(16)),
               Expanded(
                 child: SizedBox(
-                  height: 56,
+                  height: r.h(56),
                   child: _ActionButton(label: 'Close', onTap: onClose),
                 ),
               ),
             ],
           ),
-      
+
         ],
-   
     );
   }
 }
-
-// ─── Action Button ────────────────────────────────────────────────────────────
 
 class _ActionButton extends StatefulWidget {
   final String label;
@@ -242,6 +220,8 @@ class _ActionButtonState extends State<_ActionButton> {
 
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
+
     return GestureDetector(
       onTap: widget.onTap,
       child: MouseRegion(
@@ -250,7 +230,7 @@ class _ActionButtonState extends State<_ActionButton> {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(r.sp(12)),
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end:   Alignment.bottomRight,
@@ -269,9 +249,9 @@ class _ActionButtonState extends State<_ActionButton> {
           child: Center(
             child: Text(
               widget.label,
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColor.primary_text_dark,
-                fontSize: 16,
+                fontSize: r.sp(16),
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -281,8 +261,6 @@ class _ActionButtonState extends State<_ActionButton> {
     );
   }
 }
-
-// ─── Bottom Button ────────────────────────────────────────────────────────────
 
 class _BottomButton extends StatefulWidget {
   final String label;
@@ -300,6 +278,8 @@ class _BottomButtonState extends State<_BottomButton> {
 
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
+
     return GestureDetector(
       onTap: () {
         setState(() => _isPressed = !_isPressed);
@@ -310,10 +290,10 @@ class _BottomButtonState extends State<_BottomButton> {
         onExit:  (_) => setState(() => _isHovered = false),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
-          width:  200,
-          height: 56,
+          width:  r.w(200),
+          height: r.h(56),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(r.sp(16)),
             color: _isPressed
                 ? AppColor.action_color
                 : AppColor.card_first_dark.withOpacity(0.40),
@@ -327,9 +307,9 @@ class _BottomButtonState extends State<_BottomButton> {
           child: Center(
             child: Text(
               widget.label,
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColor.primary_text_dark,
-                fontSize: 16,
+                fontSize: r.sp(16),
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -339,6 +319,3 @@ class _BottomButtonState extends State<_BottomButton> {
     );
   }
 }
-
-
-

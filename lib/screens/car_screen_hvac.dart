@@ -4,12 +4,15 @@ import 'package:flutter_ivi/ui_components/airflow_direction.dart';
 import 'package:flutter_ivi/ui_components/buttons.dart';
 import 'package:flutter_ivi/ui_components/fan.dart';
 import 'package:flutter_ivi/ui_components/temperature_card.dart';
+import 'package:flutter_ivi/widgets/responsive_layout.dart';
 
 class HVACPage extends StatelessWidget {
   const HVACPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
+
     return Container(
       child: Column(
         children: [
@@ -19,10 +22,10 @@ class HVACPage extends StatelessWidget {
               alignment: Alignment.center,
               children: [
                 Container(
-                  width: 700,
-                  height: 200,
+                  width: r.w(700),
+                  height: r.h(200),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(300),
+                    borderRadius: BorderRadius.circular(r.w(300)),
                     gradient: RadialGradient(
                       colors: [AppColor.neutral_100, Colors.transparent],
                       stops: [0.0, 0.6],
@@ -31,7 +34,7 @@ class HVACPage extends StatelessWidget {
                 ),
 
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
+                  padding: EdgeInsets.only(bottom: r.h(10)),
                   child: Image.asset('assets/images/car.png'),
                 ),
               ],
@@ -41,7 +44,7 @@ class HVACPage extends StatelessWidget {
           Expanded(
             //wrap left , right airflow and row
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 80),
+              padding: EdgeInsets.symmetric(horizontal: r.w(80)),
               child: Row(
                 children: [
                   Expanded(flex: 1, child: AirflowControl(label: 'left')),
@@ -61,37 +64,35 @@ class HVACPage extends StatelessWidget {
                         Expanded(
                           flex: 5,
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 60),
+                            padding: EdgeInsets.symmetric(horizontal: r.w(60)),
                             child: Row(
-                           
                               children: [
                                 Expanded(
                                   flex: 2,
-                                  child: Button(label: 'A/C', font_size: 30),
+                                  child: Button(label: 'A/C', font_size: r.sp(30)),
                                 ),
                                 Spacer(flex: 1),
                                 Expanded(
                                   flex: 2,
-                                  child: Button(label: 'Auto', font_size: 30),
+                                  child: Button(label: 'Auto', font_size: r.sp(30)),
                                 ),
                                 Spacer(flex: 1),
                                 Expanded(
                                   flex: 2,
-                                  child: Button(label: 'Sync', font_size: 30),
+                                  child: Button(label: 'Sync', font_size: r.sp(30)),
                                 ),
                               ],
                             ),
                           ),
                         ),
 
-                     
                         Spacer(flex: 1),
 
                         //fan
                         Expanded(
                           flex: 5,
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 40),
+                            padding: EdgeInsets.symmetric(horizontal: r.w(40)),
                             child: FanSpeedSelector(),
                           ),
                         ),

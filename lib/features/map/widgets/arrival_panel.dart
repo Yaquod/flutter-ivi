@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ivi/widgets/responsive_layout.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ArrivalPanel extends StatelessWidget {
-  final double scale;
-
-  const ArrivalPanel({super.key, this.scale = 1.0});
+  const ArrivalPanel({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
+
     return Container(
-      padding: EdgeInsets.all(12 * scale),
+      padding: r.edgeInsetsAll(12),
       decoration: BoxDecoration(
         color: const Color(0xff333333).withValues(alpha: 0.85),
-        borderRadius: BorderRadius.circular(16 * scale),
+        borderRadius: BorderRadius.circular(r.sp(16)),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -20,45 +21,45 @@ class ArrivalPanel extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buildTextColumn("Fireart Studio", "ul. Marynarska 21, 02-674", CrossAxisAlignment.start),
-              _buildTextColumn("09:51", "Estimated Arrival", CrossAxisAlignment.end),
+              _buildTextColumn(r, "Fireart Studio", "ul. Marynarska 21, 02-674", CrossAxisAlignment.start),
+              _buildTextColumn(r, "09:51", "Estimated Arrival", CrossAxisAlignment.end),
             ],
           ),
-          _buildProgressBar(),
+          _buildProgressBar(r),
         ],
       ),
     );
   }
 
-  Widget _buildTextColumn(String title, String sub, CrossAxisAlignment align) {
+  Widget _buildTextColumn(ResponsiveLayout r, String title, String sub, CrossAxisAlignment align) {
     return Column(
       crossAxisAlignment: align,
       children: [
-        Text(title, style: GoogleFonts.inter(color: Colors.white, fontSize: 12 * scale, fontWeight: FontWeight.w700)),
-        SizedBox(height: 4 * scale),
-        Text(sub, style: GoogleFonts.inter(color: const Color(0xffcccccc), fontSize: 8 * scale, fontWeight: FontWeight.w400)),
+        Text(title, style: GoogleFonts.inter(color: Colors.white, fontSize: r.sp(12), fontWeight: FontWeight.w700)),
+        SizedBox(height: r.h(4)),
+        Text(sub, style: GoogleFonts.inter(color: const Color(0xffcccccc), fontSize: r.sp(8), fontWeight: FontWeight.w400)),
       ],
     );
   }
 
-  Widget _buildProgressBar() {
+  Widget _buildProgressBar(ResponsiveLayout r) {
     return Row(
       children: [
-        Text("5.1 km", style: GoogleFonts.inter(color: Colors.white, fontSize: 15 * scale, fontWeight: FontWeight.w700)),
-        SizedBox(width: 15 * scale),
+        Text("5.1 km", style: GoogleFonts.inter(color: Colors.white, fontSize: r.sp(15), fontWeight: FontWeight.w700)),
+        SizedBox(width: r.w(15)),
         Expanded(
           child: Container(
-            height: 3 * scale,
-            decoration: BoxDecoration(color: Colors.white24, borderRadius: BorderRadius.circular(2)),
+            height: r.h(3),
+            decoration: BoxDecoration(color: Colors.white24, borderRadius: BorderRadius.circular(r.sp(2))),
             child: FractionallySizedBox(
               widthFactor: 0.6,
               alignment: Alignment.centerLeft,
-              child: Container(decoration: BoxDecoration(color: const Color(0xFF00E5FF), borderRadius: BorderRadius.circular(2))),
+              child: Container(decoration: BoxDecoration(color: const Color(0xFF00E5FF), borderRadius: BorderRadius.circular(r.sp(2)))),
             ),
           ),
         ),
-        SizedBox(width: 15 * scale),
-        Text("9 min", style: GoogleFonts.inter(color: Colors.white, fontSize: 15 * scale, fontWeight: FontWeight.w700)),
+        SizedBox(width: r.w(15)),
+        Text("9 min", style: GoogleFonts.inter(color: Colors.white, fontSize: r.sp(15), fontWeight: FontWeight.w700)),
       ],
     );
   }

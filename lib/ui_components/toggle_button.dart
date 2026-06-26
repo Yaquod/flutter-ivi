@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ivi/constants/app_color.dart';
-
-
+import 'package:flutter_ivi/widgets/responsive_layout.dart';
 
 class DriverPassengerToggle extends StatelessWidget {
   final bool isDriver;
@@ -15,7 +14,6 @@ class DriverPassengerToggle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-    
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -37,8 +35,6 @@ class DriverPassengerToggle extends StatelessWidget {
   }
 }
 
-// ─── Single Toggle Button ─────────────────────────────────────────────────────
-
 class ToggleButton extends StatelessWidget {
   final String label;
   final bool isActive;
@@ -54,18 +50,20 @@ class ToggleButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
+
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        width: 160,
-        height: 60,
+        width: r.w(160),
+        height: r.h(60),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
-            topLeft:     Radius.circular(isLeft ? 16 : 0),
-            bottomLeft:  Radius.circular(isLeft ? 16 : 0),
-            topRight:    Radius.circular(isLeft ? 0 : 16),
-            bottomRight: Radius.circular(isLeft ? 0 : 16),
+            topLeft:     Radius.circular(isLeft ? r.sp(16) : 0),
+            bottomLeft:  Radius.circular(isLeft ? r.sp(16) : 0),
+            topRight:    Radius.circular(isLeft ? 0 : r.sp(16)),
+            bottomRight: Radius.circular(isLeft ? 0 : r.sp(16)),
           ),
           color: isActive ? AppColor.action_color : Colors.transparent,
           border: isActive
@@ -82,7 +80,7 @@ class ToggleButton extends StatelessWidget {
               color: isActive
                   ? AppColor.primary_text_dark
                   : AppColor.secondary_text_dark,
-              fontSize: 16,
+              fontSize: r.sp(16),
               fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
             ),
           ),

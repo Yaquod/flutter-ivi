@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ivi/constants/app_color.dart';
 import 'package:flutter_ivi/ui_components/tire_pressure.dart';
+import 'package:flutter_ivi/widgets/responsive_layout.dart';
 import 'dart:math' as math;
 
 class CarPage extends StatelessWidget {
@@ -8,24 +9,23 @@ class CarPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
+
     return Padding(
-      padding: const EdgeInsets.all(24),
+      padding: r.edgeInsetsAll(24),
       child: Column(
         children: [
 
-          // ── Top section ──────────────────────────────────────
           Expanded(
             flex: 6,
             child: Row(
               children: [
 
-                //left car info
                 const Expanded(
                   flex: 4,
                   child: _CarInfoPanel(),
                 ),
 
-                // car with tire pressure 
                 const Expanded(
                   flex: 6,
                   child: TirePressurePanel(),
@@ -35,9 +35,8 @@ class CarPage extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: 24),
+          SizedBox(height: r.h(24)),
 
-          //circular progress 
           Expanded(
             flex: 4,
             child: Row(
@@ -49,14 +48,14 @@ class CarPage extends StatelessWidget {
                   unit: 'Mi',
                   label: 'Fuel',
                 ),
-                const SizedBox(width: 40),
+                SizedBox(width: r.w(40)),
                 _CircularGauge(
                   value: 5000,
                   max: 8000,
                   unit: '',
                   label: 'RPM',
                 ),
-                const SizedBox(width: 40),
+                SizedBox(width: r.w(40)),
                 _CircularGauge(
                   value: 200,
                   max: 300,
@@ -73,29 +72,27 @@ class CarPage extends StatelessWidget {
   }
 }
 
-// car info pannel
-
 class _CarInfoPanel extends StatelessWidget {
   const _CarInfoPanel();
 
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
+
     return Padding(
-      padding: const EdgeInsets.all(40),
+      padding: r.edgeInsetsAll(40),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-      //  mainAxisAlignment: MainAxisAlignment.center,
         children: [
-      
-          // car name 
+
           RichText(
-            text: const TextSpan(
+            text: TextSpan(
               children: [
                 TextSpan(
                   text: 'HONDA CIVIC ',
                   style: TextStyle(
                     color: AppColor.primary_text_dark,
-                    fontSize: 28,
+                    fontSize: r.sp(28),
                     fontWeight: FontWeight.w800,
                     letterSpacing: 1.2,
                   ),
@@ -104,51 +101,46 @@ class _CarInfoPanel extends StatelessWidget {
                   text: '2025',
                   style: TextStyle(
                     color: AppColor.secondary_text_dark,
-                    fontSize: 28,
+                    fontSize: r.sp(28),
                     fontWeight: FontWeight.w300,
                   ),
                 ),
               ],
             ),
           ),
-      
-          const SizedBox(height: 4),
-      
-          // color
-          const Text(
+
+          SizedBox(height: r.h(4)),
+
+          Text(
             'White Pearl',
             style: TextStyle(
               color: AppColor.secondary_text_dark,
-              fontSize: 14,
+              fontSize: r.sp(14),
             ),
           ),
-      
-          const SizedBox(height: 32),
-      
-          // battery level
+
+          SizedBox(height: r.h(32)),
+
           _InfoRow(
             icon: Icons.battery_charging_full,
             label: 'Battery Level',
             value: '75%',
             isHighlighted: true,
           ),
-      
-          const SizedBox(height: 16),
-      
-          // driving range
+
+          SizedBox(height: r.h(16)),
+
           _InfoRow(
             icon: Icons.directions_car,
             label: 'Driving Range',
             value: '306 Km',
           ),
-      
+
         ],
       ),
     );
   }
 }
-
-// ─── Info Row ─────────────────────────────────────────────────────────────────
 
 class _InfoRow extends StatelessWidget {
   final IconData icon;
@@ -165,25 +157,27 @@ class _InfoRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
+
     return Row(
       children: [
-        Icon(icon, color: AppColor.secondary_text_dark, size: 18),
-        const SizedBox(width: 8),
+        Icon(icon, color: AppColor.secondary_text_dark, size: r.iconXs),
+        SizedBox(width: r.w(8)),
         Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             color: AppColor.secondary_text_dark,
-            fontSize: 14,
+            fontSize: r.sp(14),
           ),
         ),
-        const SizedBox(width: 12),
+        SizedBox(width: r.w(12)),
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+          padding: EdgeInsets.symmetric(horizontal: r.w(10), vertical: r.h(3)),
           decoration: BoxDecoration(
             color: isHighlighted
                 ? AppColor.action_color.withOpacity(0.20)
                 : Colors.transparent,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(r.sp(8)),
           ),
           child: Text(
             value,
@@ -191,7 +185,7 @@ class _InfoRow extends StatelessWidget {
               color: isHighlighted
                   ? AppColor.action_color
                   : AppColor.primary_text_dark,
-              fontSize: 14,
+              fontSize: r.sp(14),
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -201,52 +195,47 @@ class _InfoRow extends StatelessWidget {
   }
 }
 
-// ─── Tire Pressure Panel ──────────────────────────────────────────────────────
-
 class TirePressurePanel extends StatelessWidget {
   const TirePressurePanel();
 
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
+
     return Stack(
       alignment: Alignment.center,
       children: [
 
-        // ── Car top view image ────────────────────────────
         SizedBox(
-          width: 280,
-          height: 340,
+          width: r.w(280),
+          height: r.h(340),
           child: Image.asset(
             'assets/images/car_top_view.png',
             fit: BoxFit.contain,
           ),
         ),
 
-        // ── Front left tire ───────────────────────────────
         Positioned(
-          top: 20,
-          left: 150,
+          top: r.h(20),
+          left: r.w(150),
           child: TirePressure(value: 34),
         ),
 
-        // ── Front right tire ──────────────────────────────
         Positioned(
-          top: 20,
-          right: 150,
+          top: r.h(20),
+          right: r.w(150),
           child: TirePressure(value: 34),
         ),
 
-        // ── Rear left tire ────────────────────────────────
         Positioned(
-          bottom: 20,
-          left: 150,
+          bottom: r.h(20),
+          left: r.w(150),
           child: TirePressure(value: 34),
         ),
 
-        // ── Rear right tire ───────────────────────────────
         Positioned(
-          bottom: 20,
-          right: 150,
+          bottom: r.h(20),
+          right: r.w(150),
           child: TirePressure(value: 34),
         ),
 
@@ -254,12 +243,6 @@ class TirePressurePanel extends StatelessWidget {
     );
   }
 }
-
-
-
-
-
-// ─── Circular Gauge ───────────────────────────────────────────────────────────
 
 class _CircularGauge extends StatelessWidget {
   final double value;
@@ -276,14 +259,15 @@ class _CircularGauge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
 
-        // ── Gauge ─────────────────────────────────────────
         SizedBox(
-          width: 140,
-          height: 140,
+          width: r.w(140),
+          height: r.h(140),
           child: CustomPaint(
             painter: _GaugePainter(value: value / max),
             child: Center(
@@ -293,17 +277,17 @@ class _CircularGauge extends StatelessWidget {
                   children: [
                     TextSpan(
                       text: value.toInt().toString(),
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColor.action_color,
-                        fontSize: 26,
+                        fontSize: r.sp(26),
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     TextSpan(
                       text: unit.isNotEmpty ? '\n$unit' : '',
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColor.secondary_text_dark,
-                        fontSize: 12,
+                        fontSize: r.sp(12),
                       ),
                     ),
                   ],
@@ -313,14 +297,11 @@ class _CircularGauge extends StatelessWidget {
           ),
         ),
 
-     //   const SizedBox(height: 8),
-
-        // ── Label ─────────────────────────────────────────
         Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             color: AppColor.secondary_text_dark,
-            fontSize: 14,
+            fontSize: r.sp(14),
           ),
         ),
 
@@ -329,10 +310,8 @@ class _CircularGauge extends StatelessWidget {
   }
 }
 
-// ─── Gauge Painter ────────────────────────────────────────────────────────────
-
 class _GaugePainter extends CustomPainter {
-  final double value; // 0.0 to 1.0
+  final double value;
 
   const _GaugePainter({required this.value});
 
@@ -341,11 +320,9 @@ class _GaugePainter extends CustomPainter {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = size.width / 2 - 10;
 
-    // ── Start: bottom-left, sweep ~270 degrees ──────────
     const startAngle = math.pi * 0.75;
     const sweepTotal = math.pi * 1.5;
 
-    // ── Background track ─────────────────────────────────
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius),
       startAngle,
@@ -358,7 +335,6 @@ class _GaugePainter extends CustomPainter {
         ..strokeCap = StrokeCap.round,
     );
 
-    // ── Active arc ───────────────────────────────────────
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius),
       startAngle,

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ivi/constants/app_color.dart';
-
-
+import 'package:flutter_ivi/widgets/responsive_layout.dart';
 
 class DoorRect extends StatefulWidget {
   final bool isSelected;
@@ -18,20 +17,20 @@ class _DoorRectState extends State<DoorRect> {
 
   @override
   Widget build(BuildContext context) {
-     final isActive = widget.isSelected || _isHovered;
-     return MouseRegion(
+    final r = ResponsiveLayout.of(context);
+    final isActive = widget.isSelected || _isHovered;
+
+    return MouseRegion(
      onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
-     
     child:GestureDetector(
       onTap: widget.onTap,
-      
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        width:  90,
-        height: 130,
+        width:  r.w(90),
+        height: r.h(130),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(r.sp(12)),
           color: widget.isSelected
               ? AppColor.action_color.withOpacity(0.25)
               : AppColor.card_second_dark.withOpacity(0.1),
@@ -47,4 +46,3 @@ class _DoorRectState extends State<DoorRect> {
      );
   }
 }
-

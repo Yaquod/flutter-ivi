@@ -4,9 +4,7 @@ import 'package:flutter_ivi/ui_components/menu_selector.dart';
 import 'package:flutter_ivi/screens/car_screen_seat.dart';
 import 'package:flutter_ivi/screens/car_screen_door.dart';
 import 'package:flutter_ivi/screens/car_screen_car.dart';
-
-
-
+import 'package:flutter_ivi/widgets/responsive_layout.dart';
 
 class CarDashboard extends StatefulWidget {
   const CarDashboard({super.key});
@@ -27,6 +25,8 @@ class _CarDashboardState extends State<CarDashboard> {
 
  @override
 Widget build(BuildContext context) {
+  final r = ResponsiveLayout.of(context);
+
   return Row(
     children: [
       SideMenu(
@@ -36,6 +36,8 @@ Widget build(BuildContext context) {
           setState(() => selectedIndex = index);
         },
       ),
+
+      SizedBox(width: r.w(24)),
 
       Expanded(
         child: IndexedStack(

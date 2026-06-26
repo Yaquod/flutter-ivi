@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ivi/widgets/responsive_layout.dart';
 
 class BottomNav extends StatelessWidget {
   const BottomNav({super.key, required this.currentIndex, required this.onTap});
@@ -15,7 +16,6 @@ class BottomNav extends StatelessWidget {
         _buildNavItem(Icons.location_on, 2),
         _buildNavItem(Icons.apps_sharp, 3),
         _buildNavItem(Icons.settings_sharp, 4),
-
       ],
     );
   }
@@ -28,8 +28,6 @@ class BottomNav extends StatelessWidget {
 }
 }
 
-
-
 class NavIcon extends StatelessWidget {
   const NavIcon(this.icon, this.active, {super.key});
   final IconData icon;
@@ -37,24 +35,25 @@ class NavIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color activeColor = Color(0xff429DF3);
-    final Color inactiveColor = Color(0xff666666);
+    final r = ResponsiveLayout.of(context);
+    final Color activeColor = const Color(0xff429DF3);
+    final Color inactiveColor = const Color(0xff666666);
 
     return Icon(
       icon,
       color: active ? activeColor : inactiveColor,
-      size: 40,
+      size: r.iconLg,
 
       shadows:active ? [
         Shadow(
           color: activeColor.withValues(alpha: 0.8),
-          blurRadius: 3,
+          blurRadius: r.sp(3),
           offset: Offset(0, 0)
         ),
 
         Shadow(
           color: activeColor.withValues(alpha: 0.4),
-          blurRadius: 6,
+          blurRadius: r.sp(6),
           offset: Offset(0, 0)
         ),
       ] : null,

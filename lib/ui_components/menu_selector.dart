@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ivi/constants/app_color.dart';
 import 'package:flutter_ivi/ui_components/new_card.dart';
-
-
+import 'package:flutter_ivi/widgets/responsive_layout.dart';
 
 class SideMenu extends StatelessWidget {
   final List<String> items;
@@ -19,17 +18,19 @@ class SideMenu extends StatelessWidget {
     required this.selectedIndex,
     required this.onChanged,
     this.width,
-    this.itemHeight = 80,
+    this.itemHeight,
     this.height,
   });
 
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
+
     return GlassCard(
-      width: width ?? 212,
-      height: height ?? 448,
+      width: width ?? r.w(212),
+      height: height ?? r.h(448),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 40),
+        padding: EdgeInsets.symmetric(vertical: r.h(40)),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: List.generate(items.length, (index) {
@@ -40,11 +41,11 @@ class SideMenu extends StatelessWidget {
                 GestureDetector(
                   onTap: () => onChanged(index),
                   child: AnimatedContainer(
-                    height: itemHeight,
+                    height: itemHeight ?? r.h(80),
                     duration: const Duration(milliseconds: 250),
                     curve: Curves.easeInOut,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(r.sp(16)),
                       color: isSelected
                           ? AppColor.action_color.withOpacity(0.25)
                           : Colors.transparent,
@@ -59,7 +60,7 @@ class SideMenu extends StatelessWidget {
                     child: AnimatedDefaultTextStyle(
                       duration: const Duration(milliseconds: 200),
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: r.sp(20),
                         color: isSelected
                             ? AppColor.action_color
                             : AppColor.secondary_text_dark,
@@ -72,7 +73,7 @@ class SideMenu extends StatelessWidget {
                 ),
 
                 if (index != items.length - 1)
-                  const SizedBox(height: 16),
+                  SizedBox(height: r.h(16)),
               ],
             );
           }),

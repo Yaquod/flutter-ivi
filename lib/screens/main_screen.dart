@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ivi/widgets/bottom_nav.dart';
 import 'package:flutter_ivi/widgets/top_bar.dart';
+import 'package:flutter_ivi/widgets/responsive_layout.dart';
 import 'package:flutter_ivi/screens/apps_screen.dart';
 import 'package:flutter_ivi/screens/car_screen.dart';
 import 'package:flutter_ivi/screens/home_screen.dart';
@@ -20,6 +21,8 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
+
     final List<Widget> pages = [
       HomeScreen(
         onMapTap: () {
@@ -37,28 +40,27 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       body: AppBackground(
         child: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: r.edgeInsetsAll(24),
           child: Column(
             children: [
               const TopBar(),
 
-              const SizedBox(height: 24),
+              SizedBox(height: r.h(24)),
 
               Expanded(
                 child: IndexedStack(index: _currentIndex, children: pages),
               ),
 
-              const SizedBox(height: 24),
+              SizedBox(height: r.h(24)),
 
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 220,
-                  vertical: 20,
+                padding: EdgeInsets.symmetric(
+                  horizontal: r.w(220),
+                  vertical: r.h(20),
                 ),
                 child: BottomNav(
                   currentIndex: _currentIndex,
                   onTap: (index) {
-                 
                     setState(() {
                       _currentIndex = index;
                     });

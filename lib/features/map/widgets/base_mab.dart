@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ivi/features/map/logic/map_manager.dart';
+import 'package:flutter_ivi/widgets/responsive_layout.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -57,8 +58,10 @@ class _BaseMabState extends State<BaseMab> {
 
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
+
     return ClipRRect(
-      borderRadius: BorderRadius.circular(24),
+      borderRadius: BorderRadius.circular(r.sp(24)),
       child: Stack(
         children: [
           FlutterMap(
@@ -87,13 +90,13 @@ class _BaseMabState extends State<BaseMab> {
                 markers: [
                   Marker(
                     point: MapManager.mapState.center,
-                    width: 60,
-                    height: 60,
+                    width: r.w(60),
+                    height: r.h(60),
 
                     child: Icon(
                       Icons.location_on,
                       color: Colors.blue.shade400,
-                      size: 40,
+                      size: r.iconMd,
                     ),
                   ),
                 ],

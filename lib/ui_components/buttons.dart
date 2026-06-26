@@ -1,37 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ivi/constants/app_color.dart';
-
+import 'package:flutter_ivi/widgets/responsive_layout.dart';
 
 class Button extends StatefulWidget {
-  // final double width;
-  // final double height;
   final String label ;
   final double font_size ; 
 
   const Button({
     super.key , 
-    // required this.width,
-    // required this.height,
     required this.label,
     required this.font_size ,
-     
-  
   });
-
-  
 
   @override
   State<Button> createState() => _ButtonState();
 }
 
 class _ButtonState extends State<Button> {
-   
    bool _isHovered = false ;
    bool _isPressed = false ; 
 
-
    BoxDecoration _BuildDecoration() {
-
     final base_gradient = LinearGradient(
       begin: Alignment.topLeft,
       end : Alignment.bottomRight ,
@@ -42,14 +31,11 @@ class _ButtonState extends State<Button> {
       ]
     );
 
-
       final base_shadow =  BoxShadow(
         color : Colors.black.withOpacity(0.25),
         blurRadius: 4,
         offset: const Offset(0, 4),
-
       );
-
 
       return BoxDecoration(
         borderRadius: BorderRadius.circular(16),
@@ -63,28 +49,24 @@ class _ButtonState extends State<Button> {
       );
    }
 
-
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
+
     return GestureDetector(
       onTap: () => setState(() => _isPressed = !_isPressed),
       child: MouseRegion(
         onEnter: (_) => setState(() => _isHovered = true),
         onExit:  (_) => setState(() => _isHovered = false),
         child: SizedBox(
-          width: 120,
-          height: 60,
-
+          width: r.w(120),
+          height: r.h(60),
           child : Stack(
             alignment: Alignment.center,
            children: [
-            
-            
-          
           Container(
             decoration: _BuildDecoration(),
           ),
-
 
           Text(
             widget.label,
@@ -94,15 +76,12 @@ class _ButtonState extends State<Button> {
             fontWeight: FontWeight.w500,
           ),
           ),
-           
-           ], 
 
-            
+           ], 
 
           )
         ),
       ),
     );
-    ;
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ivi/constants/app_color.dart';
-
+import 'package:flutter_ivi/widgets/responsive_layout.dart';
 
 class TirePressure extends StatelessWidget {
   final int value;
@@ -9,28 +9,27 @@ class TirePressure extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
 
-       //blue bar
        Stack(
-        
         children: [
 
           Container(
-          width: 80,
-          height: 6,
+          width: r.w(80),
+          height: r.h(6),
           color: AppColor.card_second_dark.withOpacity(0.25),
           ),
 
-
           Container(
-          width: 40,
-          height: 6,
+          width: r.w(40),
+          height: r.h(6),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(3),
+            borderRadius: BorderRadius.circular(r.sp(3)),
             gradient: LinearGradient(
               colors: [
                 AppColor.action_color,
@@ -41,27 +40,25 @@ class TirePressure extends StatelessWidget {
         ),
         ],
        ),
-       
 
-        const SizedBox(height: 4),
+        SizedBox(height: r.h(4)),
 
-       //value
         RichText(
           text: TextSpan(
             children: [
               TextSpan(
                 text: '$value',
-                style: const TextStyle(
+                style: TextStyle(
                   color: AppColor.primary_text_dark,
-                  fontSize: 16,
+                  fontSize: r.sp(16),
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              const TextSpan(
+              TextSpan(
                 text: ' Psi',
                 style: TextStyle(
                   color: AppColor.secondary_text_dark,
-                  fontSize: 11,
+                  fontSize: r.sp(11),
                 ),
               ),
             ],

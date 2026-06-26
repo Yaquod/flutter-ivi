@@ -1,34 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ivi/widgets/responsive_layout.dart';
 import '../logic/map_manager.dart';
 
 class SideControls extends StatelessWidget {
-  final double scale; // معامل تكبير الحجم (1.0 للطبيعي)
-
-  const SideControls({super.key, this.scale = 1.0});
+  const SideControls({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
+
     return Column(
       children: [
-        _buildSideButton(Icons.near_me_outlined),
-        SizedBox(height: 16 * scale),
+        _buildSideButton(r, Icons.near_me_outlined),
+        SizedBox(height: r.h(16)),
         Container(
-          padding: EdgeInsets.all(8 * scale),
+          padding: r.edgeInsetsAll(8),
           decoration: BoxDecoration(
             color: Colors.black.withValues(alpha: 0.3),
-            borderRadius: BorderRadius.circular(12 * scale),
+            borderRadius: BorderRadius.circular(r.sp(12)),
             border: Border.all(color: Colors.white10),
           ),
           child: Column(
             children: [
               GestureDetector(
                 onTap: () => MapManager.mapState.setZoom(MapManager.mapState.zoom + 1),
-                child: Icon(Icons.add, color: Colors.white, size: 18 * scale),
+                child: Icon(Icons.add, color: Colors.white, size: r.iconXs),
               ),
-              SizedBox(height: 16 * scale),
+              SizedBox(height: r.h(16)),
               GestureDetector(
                 onTap: () => MapManager.mapState.setZoom(MapManager.mapState.zoom - 1),
-                child: Icon(Icons.remove, color: Colors.white, size: 18 * scale),
+                child: Icon(Icons.remove, color: Colors.white, size: r.iconXs),
               ),
             ],
           ),
@@ -37,15 +38,15 @@ class SideControls extends StatelessWidget {
     );
   }
 
-  Widget _buildSideButton(IconData icon) {
+  Widget _buildSideButton(ResponsiveLayout r, IconData icon) {
     return Container(
-      padding: EdgeInsets.all(8 * scale),
+      padding: r.edgeInsetsAll(8),
       decoration: BoxDecoration(
         color: Colors.black.withValues(alpha: 0.3),
-        borderRadius: BorderRadius.circular(12 * scale),
+        borderRadius: BorderRadius.circular(r.sp(12)),
         border: Border.all(color: Colors.white10),
       ),
-      child: Icon(icon, color: Colors.white, size: 18 * scale),
+      child: Icon(icon, color: Colors.white, size: r.iconXs),
     );
   }
 }

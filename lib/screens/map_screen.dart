@@ -3,43 +3,44 @@ import 'package:flutter_ivi/features/map/widgets/base_mab.dart';
 import 'package:flutter_ivi/features/map/widgets/side_controls.dart';
 import 'package:flutter_ivi/features/map/widgets/navigation_panel.dart';
 import 'package:flutter_ivi/features/map/widgets/arrival_panel.dart';
+import 'package:flutter_ivi/widgets/responsive_layout.dart';
 
 class MapScreen extends StatelessWidget {
   const MapScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    const double screenScale = 1.4;
+    final r = ResponsiveLayout.of(context);
 
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: BaseMab(
         overlayChild: Stack(
           children: [
-            const Positioned(
-              top: 30,
-              right: 30,
-              child: SideControls(scale: screenScale),
+            Positioned(
+              top: r.h(30),
+              right: r.w(30),
+              child: const SideControls(),
             ),
 
             Positioned(
-              top: 30,
-              left: 30,
-              child: _buildLargeMicButton(screenScale),
+              top: r.h(30),
+              left: r.w(30),
+              child: _buildLargeMicButton(r),
             ),
 
-            const Positioned(
-              bottom: 30,
-              left: 30,
-              width: 380,
-              child: NavigationPanel(scale: screenScale),
+            Positioned(
+              bottom: r.h(30),
+              left: r.w(30),
+              width: r.w(380),
+              child: const NavigationPanel(),
             ),
 
-            const Positioned(
-              bottom: 30,
-              right: 30,
-              width: 380,
-              child: ArrivalPanel(scale: screenScale),
+            Positioned(
+              bottom: r.h(30),
+              right: r.w(30),
+              width: r.w(380),
+              child: const ArrivalPanel(),
             ),
           ],
         ),
@@ -47,18 +48,18 @@ class MapScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildLargeMicButton(double scale) {
+  Widget _buildLargeMicButton(ResponsiveLayout r) {
     return Container(
-      padding: EdgeInsets.all(8 * scale),
+      padding: r.edgeInsetsAll(8),
       decoration: BoxDecoration(
         color: Colors.black.withValues(alpha: 0.3),
-        borderRadius: BorderRadius.circular(12 * scale),
+        borderRadius: BorderRadius.circular(r.sp(12)),
         border: Border.all(color: Colors.white10),
       ),
       child: Icon(
         Icons.mic_none_outlined,
         color: Colors.white,
-        size: 18 * scale,
+        size: r.iconXs,
       ),
     );
   }

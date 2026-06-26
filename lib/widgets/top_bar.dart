@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ivi/ui_components/glass_card.dart';
 import 'package:flutter_ivi/constants/app_color.dart';
 import 'package:flutter_ivi/widgets/connectivity_icon.dart';
+import 'package:flutter_ivi/widgets/responsive_layout.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
@@ -20,6 +21,8 @@ class _TopBarState extends State<TopBar> {
 
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
+
     return Row(
       children: [
         StreamBuilder<DateTime>(
@@ -29,7 +32,6 @@ class _TopBarState extends State<TopBar> {
             final now = snapshot.data ?? DateTime.now();
 
             final formattedTime = DateFormat('HH:mm').format(now);
-
             final formattedDate = DateFormat('EEEE | MMM d, yyyy').format(now);
 
             return Column(
@@ -41,7 +43,7 @@ class _TopBarState extends State<TopBar> {
                   formattedTime,
                   style: GoogleFonts.inter(
                     textStyle: TextStyle(
-                      fontSize: 20,
+                      fontSize: r.sp(20),
                       fontWeight: FontWeight.w600,
                       color: AppColor().textColor,
                     ),
@@ -52,7 +54,7 @@ class _TopBarState extends State<TopBar> {
                   formattedDate,
                   style: GoogleFonts.inter(
                     textStyle: TextStyle(
-                      fontSize: 15,
+                      fontSize: r.sp(15),
                       fontWeight: FontWeight.w400,
                       color: AppColor().textColor,
                     ),
@@ -63,34 +65,35 @@ class _TopBarState extends State<TopBar> {
           },
         ),
 
-        const SizedBox(width: 32),
+        SizedBox(width: r.w(32)),
 
         Expanded(
           child: GlassCard(
-            borderRadius: BorderRadius.circular(50),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            borderRadius: BorderRadius.circular(r.sp(50)),
+            padding: EdgeInsets.symmetric(horizontal: r.w(16), vertical: r.h(8)),
             child: TextField(
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
-                prefixIcon: const Icon(
+                  prefixIcon: Icon(
                   Icons.search,
-                  color: Color(0xff666666),
+                  color: const Color(0xff666666),
+                  size: r.iconXs,
                 ),
                 hintText: "Search",
                 hintStyle: GoogleFonts.inter(
-                  textStyle: const TextStyle(
-                    fontSize: 15,
+                  textStyle: TextStyle(
+                    fontSize: r.sp(15),
                     fontWeight: FontWeight.w400,
-                    color: Color(0xff666666),
+                    color: const Color(0xff666666),
                   ),
                 ),
                 border: InputBorder.none,
                 enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(50),
+                  borderRadius: BorderRadius.circular(r.sp(50)),
                   borderSide: BorderSide.none,
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(50),
+                  borderRadius: BorderRadius.circular(r.sp(50)),
                   borderSide: BorderSide.none,
                 ),
               ),
@@ -98,7 +101,7 @@ class _TopBarState extends State<TopBar> {
           ),
         ),
 
-        const SizedBox(width: 160),
+        SizedBox(width: r.w(160)),
 
         Row(
           mainAxisSize: MainAxisSize.min,
@@ -106,24 +109,24 @@ class _TopBarState extends State<TopBar> {
           children: [
             const ConnectivityIcon(),
 
-            const SizedBox(width: 15),
+            SizedBox(width: r.w(15)),
 
-            const Icon(Icons.bluetooth, color: Colors.white, size: 18),
+            Icon(Icons.bluetooth, color: Colors.white, size: r.iconXs),
 
-            const SizedBox(width: 15),
+            SizedBox(width: r.w(15)),
 
-            const Icon(
+            Icon(
               Icons.battery_charging_full,
               color: Colors.white,
-              size: 18,
+              size: r.iconXs,
             ),
 
-            const SizedBox(width: 25),
+            SizedBox(width: r.w(25)),
 
             CircleAvatar(
-              radius: 32,
+              radius: r.iconSm,
               backgroundColor: Colors.white.withValues(alpha: 0.1),
-              child: const Icon(Icons.person, color: Colors.white70, size: 20),
+              child: Icon(Icons.person, color: Colors.white70, size: r.iconXs),
             ),
           ],
         ),

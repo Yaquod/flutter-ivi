@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ivi/constants/app_color.dart';
-
-
-// ─── airflow icon Button (3 variants) ───────────────────────────────────────────
+import 'package:flutter_ivi/widgets/responsive_layout.dart';
 
 class AirflowButton extends StatefulWidget {
   final IconData icon;
@@ -22,6 +20,8 @@ class _AirflowButtonState extends State<AirflowButton> {
 
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
+
     final Color iconColor =
         _isPressed ? AppColor.action_color : AppColor.icon_dark_gray;
 
@@ -31,28 +31,24 @@ class _AirflowButtonState extends State<AirflowButton> {
         onEnter: (_) => setState(() => _isHovered = true),
         onExit:  (_) => setState(() => _isHovered = false),
         child: SizedBox(
-          width: 40,
-          height: 40,
+          width: r.w(40),
+          height: r.h(40),
           child: Stack(
             alignment: Alignment.center,
             children: [
 
-              // ── Icon in default state  ─────────────────────────────────────────
               Icon(
                 widget.icon,
                 color: iconColor,
-                size: 40,
-              ),
+                  size: r.iconMd,
+                ),
 
-              // ── Icon in hover state  ─────────────────────────────────
-              if (_isHovered && !_isPressed)
-              Icon(
-                widget.icon,
-                color: AppColor.neutral_500,
-                size: 40,
+                if (_isHovered && !_isPressed)
+                Icon(
+                  widget.icon,
+                  color: AppColor.neutral_500,
+                  size: r.iconMd,
               ),
-               
-            
 
             ],
           ),
@@ -61,8 +57,6 @@ class _AirflowButtonState extends State<AirflowButton> {
     );
   }
 }
-
-// ─── Seat Control Container ───────────────────────────────────────────────────
 
 class AirflowControl extends StatelessWidget {
   final String label;
@@ -74,31 +68,30 @@ class AirflowControl extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
+
     return SizedBox(
-       width: 72,
-      height: 200,    
+      width: r.w(72),
+      height: r.h(200),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-      
-          // ── Label ─────────────────────────────────────────────
+
           Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColor.secondary_text_dark,
-              fontSize: 14,
+              fontSize: r.sp(14),
               fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(height: 8),
-      
-          // ── Container ─────────────────────────────────────────
+          SizedBox(height: r.h(8)),
+
           Container(
-            width:  72,
-            height: 152,
-            
+            width:  r.w(72),
+            height: r.h(152),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(r.sp(16)),
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end:   Alignment.bottomRight,
@@ -110,9 +103,9 @@ class AirflowControl extends StatelessWidget {
               ),
             ),
             child: CustomPaint(
-              painter: _SeatBorderPainter(radius: 16),
-              child: const Padding(
-                padding: EdgeInsets.symmetric(vertical: 22, horizontal: 16),
+              painter: _SeatBorderPainter(radius: r.sp(16)),
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: r.h(22), horizontal: r.w(16)),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -124,14 +117,12 @@ class AirflowControl extends StatelessWidget {
               ),
             ),
           ),
-      
+
         ],
       ),
     );
   }
 }
-
-// ─── Custom Painter ───────────────────────────────────────────────────────────
 
 class _SeatBorderPainter extends CustomPainter {
   final double radius;
@@ -145,7 +136,6 @@ class _SeatBorderPainter extends CustomPainter {
       Radius.circular(radius),
     );
 
-    // ── Stroke 1: base ────────────────────────────────────
     canvas.drawRRect(
       rrect,
       Paint()
@@ -154,7 +144,6 @@ class _SeatBorderPainter extends CustomPainter {
         ..color = AppColor.card_border_second_dark.withOpacity(0.10),
     );
 
-    // ── Stroke 2: gradient ────────────────────────────────
     canvas.drawRRect(
       rrect,
       Paint()
@@ -175,4 +164,3 @@ class _SeatBorderPainter extends CustomPainter {
   @override
   bool shouldRepaint(_SeatBorderPainter old) => old.radius != radius;
 }
-

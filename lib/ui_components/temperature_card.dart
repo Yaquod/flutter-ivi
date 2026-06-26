@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ivi/constants/app_color.dart';
 import 'package:flutter_ivi/ui_components/new_card.dart';
-
+import 'package:flutter_ivi/widgets/responsive_layout.dart';
 
 class CircleIconButton extends StatefulWidget {
   final IconData icon;
@@ -15,13 +15,11 @@ class CircleIconButton extends StatefulWidget {
 
 class _CircleIconButtonState extends State<CircleIconButton> {
   bool _isHovered = false;
-  
-
-  static const double size = 50.0;
 
   @override
   Widget build(BuildContext context) {
-  
+    final r = ResponsiveLayout.of(context);
+    final size = r.w(50);
 
     final Color iconColor = AppColor.icon_dark_white;
 
@@ -35,17 +33,12 @@ class _CircleIconButtonState extends State<CircleIconButton> {
           height: size,
           child: Stack(
             children: [
-             
-               //base for circle button
+
                  GlassCard(
                   width: size,
                   height: size,
                   borderRadius: size / 2,
-                
               ),
-              
-
-              //hovered state layer
 
               if (_isHovered)
                 Container(
@@ -55,7 +48,7 @@ class _CircleIconButtonState extends State<CircleIconButton> {
                   ),
                 ),
 
-              Center(child: Icon(widget.icon, color: iconColor, size: 25)),
+              Center(child: Icon(widget.icon, color: iconColor, size: r.iconSm)),
             ],
           ),
         ),
@@ -64,8 +57,6 @@ class _CircleIconButtonState extends State<CircleIconButton> {
   }
 }
 
-// ─── display temperature value ──────────────────────────────────────────────────────
-
 class TempDisplay extends StatelessWidget {
   final double temperature;
 
@@ -73,20 +64,19 @@ class TempDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
+
     return Text(
-      '${temperature.toStringAsFixed(1)}°',
-      style: const TextStyle(
+      '${temperature.toStringAsFixed(1)}\u00b0',
+      style: TextStyle(
         color: AppColor.primary_text_dark,
-        fontSize: 32,
+        fontSize: r.sp(32),
         fontWeight: FontWeight.w600,
         letterSpacing: 1.2,
-        //fontFamily: roboto
       ),
     );
   }
 }
-
-// ─── Temperature Card ─────────────────────────────────────────────────────────
 
 class TemperatureCard extends StatefulWidget {
   const TemperatureCard({super.key});
@@ -121,16 +111,18 @@ class _TemperatureCardState extends State<TemperatureCard> {
 
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
+
     return Container(
-      height: 80,
-      width: 650,
-      padding: const EdgeInsets.symmetric(horizontal: 30),
+      height: r.h(80),
+      width: r.w(650),
+      padding: EdgeInsets.symmetric(horizontal: r.w(30)),
       decoration: BoxDecoration(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(57.5),
-          topRight: Radius.circular(57.5),
-          bottomLeft: Radius.circular(32),
-          bottomRight: Radius.circular(32),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(r.sp(57.5)),
+          topRight: Radius.circular(r.sp(57.5)),
+          bottomLeft: Radius.circular(r.sp(32)),
+          bottomRight: Radius.circular(r.sp(32)),
         ),
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -145,8 +137,8 @@ class _TemperatureCardState extends State<TemperatureCard> {
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.25),
-            blurRadius: 8,
-            offset: Offset(0, 2),
+            blurRadius: r.sp(8),
+            offset: Offset(0, r.h(2)),
           ),
         ],
 
@@ -155,38 +147,25 @@ class _TemperatureCardState extends State<TemperatureCard> {
           width: 1.5,
         ),
       ),
-     
 
-      
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8) ,
-        //wrap left temp row , right temp row and cooling icon
+        padding: EdgeInsets.symmetric(horizontal: r.w(8)),
         child: Row(
-       //   mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.spaceBetween , 
-          
-           
           children: [
-            
-        
-            //left row that wrap left minus , left plus , left temp
+
             Expanded(
               flex : 5,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                    // ── Left: minus ───────────────────────────────────
                   CircleIconButton(
                     icon: Icons.remove,
                     onTap: () => _adjustTemp(true, false),
                   ),
-                
-                  
-                  // ── Left temp value ───────────────────────────────
+
                   TempDisplay(temperature: _leftTemp),
-              
-                  
-                  // ── Left: plus ────────────────────────────────────
+
                   CircleIconButton(
                     icon: Icons.add,
                     onTap: () => _adjustTemp(true, true),
@@ -194,33 +173,23 @@ class _TemperatureCardState extends State<TemperatureCard> {
                 ],
               ),
             ),
-        
-           
-            //cooling icon
+
             Expanded(
               flex: 3 ,
-              child: Icon(Icons.ac_unit, color: AppColor.action_color, size: 36)),
-        
-      
-        
-             //right row that wrap right minus , right plus , right temp
-            Expanded(
+              child: Icon(Icons.ac_unit, color: AppColor.action_color, size: r.iconMd)),
+
+             Expanded(
                 flex : 5,
               child: Row(
                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                    // ── Right: minus ──────────────────────────────────
                   CircleIconButton(
                     icon: Icons.remove,
                     onTap: () => _adjustTemp(false, false),
                   ),
-               
-                  
-                  // ── Right temp value ──────────────────────────────
+
                   TempDisplay(temperature: _rightTemp),
-              
-                  
-                  // ── Right: plus ───────────────────────────────────
+
                   CircleIconButton(
                     icon: Icons.add,
                     onTap: () => _adjustTemp(false, true),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/vehicle_provider.dart';
 import '../proto/vehicle_frame.pb.dart';
+import '../widgets/responsive_layout.dart';
 import 'dart:math' as math;
 
 class ClusterScreen extends StatelessWidget {
@@ -22,29 +23,28 @@ class ClusterScreen extends StatelessWidget {
   }
 }
 
-// ── Loading ──────────────────────────────────────────────────────────────────
-
 class _LoadingView extends StatelessWidget {
   const _LoadingView();
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: Color(0xFF0A0A0F),
+    final r = ResponsiveLayout.of(context);
+    return Scaffold(
+      backgroundColor: const Color(0xFF0A0A0F),
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             SizedBox(
-              width: 48, height: 48,
-              child: CircularProgressIndicator(
+              width: r.w(48), height: r.h(48),
+              child: const CircularProgressIndicator(
                 strokeWidth: 2,
                 color: Color(0xFF00E5FF),
               ),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: r.h(20)),
             Text('CONNECTING', style: TextStyle(
-              color: Color(0xFF00E5FF),
-              fontSize: 11,
+              color: const Color(0xFF00E5FF),
+              fontSize: r.sp(11),
               letterSpacing: 4,
               fontFamily: 'monospace',
             )),
@@ -55,31 +55,30 @@ class _LoadingView extends StatelessWidget {
   }
 }
 
-// ── Error ─────────────────────────────────────────────────────────────────────
-
 class _ErrorView extends StatelessWidget {
   final String message;
   const _ErrorView({required this.message});
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
     return Scaffold(
       backgroundColor: const Color(0xFF0A0A0F),
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.link_off, color: Color(0xFFFF3D57), size: 40),
-            const SizedBox(height: 16),
-            const Text('CONNECTION LOST', style: TextStyle(
-              color: Color(0xFFFF3D57),
-              fontSize: 11,
+            Icon(Icons.link_off, color: const Color(0xFFFF3D57), size: r.iconMd),
+            SizedBox(height: r.h(16)),
+            Text('CONNECTION LOST', style: TextStyle(
+              color: const Color(0xFFFF3D57),
+              fontSize: r.sp(11),
               letterSpacing: 4,
               fontFamily: 'monospace',
             )),
-            const SizedBox(height: 8),
-            Text(message, style: const TextStyle(
-              color: Color(0x66FFFFFF),
-              fontSize: 11,
+            SizedBox(height: r.h(8)),
+            Text(message, style: TextStyle(
+              color: const Color(0x66FFFFFF),
+              fontSize: r.sp(11),
               fontFamily: 'monospace',
             ), textAlign: TextAlign.center),
           ],
@@ -89,46 +88,41 @@ class _ErrorView extends StatelessWidget {
   }
 }
 
-// ── Main cluster view ─────────────────────────────────────────────────────────
-
 class _ClusterView extends StatelessWidget {
   final VehicleFrame frame;
   const _ClusterView({required this.frame});
 
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
     final speed = frame.velocity.speedKmh;
     final gear = _gearLabel(frame.gear.value);
     final mode = frame.controlMode.name.replaceFirst('MODE_', '');
     final battery = frame.batteryPct;
     final isMrm = frame.mrm.isActive;
-    final turnSignal = frame.turnSignal.value; // 0=none 1=left 2=right
+    final turnSignal = frame.turnSignal.value;
 
     return Scaffold(
       backgroundColor: const Color(0xFF0A0A0F),
       body: SafeArea(
         child: Column(
           children: [
-            // ── Top bar ──
             _TopBar(mode: mode, isMrm: isMrm, seq: frame.seq.toInt()),
-            const SizedBox(height: 8),
+            SizedBox(height: r.h(8)),
 
-            // ── Speedometer ──
             Expanded(
               flex: 5,
               child: _Speedometer(speed: speed, turnSignal: turnSignal),
             ),
 
-            // ── Info row ──
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
+              padding: EdgeInsets.symmetric(horizontal: r.w(24)),
               child: _InfoRow(frame: frame, gear: gear, battery: battery),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: r.h(12)),
 
-            // ── Bottom strip ──
             _BottomStrip(frame: frame),
-            const SizedBox(height: 16),
+            SizedBox(height: r.h(16)),
           ],
         ),
       ),
@@ -141,12 +135,10 @@ class _ClusterView extends StatelessWidget {
       case 2: return 'R';
       case 3: return 'N';
       case 4: return 'D';
-      default: return '—';
+      default: return '\u2014';
     }
   }
 }
-
-// ── Top bar ───────────────────────────────────────────────────────────────────
 
 class _TopBar extends StatelessWidget {
   final String mode;
@@ -156,50 +148,48 @@ class _TopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+      padding: r.edgeInsetsOnly(l: 20, t: 12, r: 20),
       child: Row(
         children: [
-          // Mode badge
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            padding: EdgeInsets.symmetric(horizontal: r.w(10), vertical: r.h(4)),
             decoration: BoxDecoration(
               border: Border.all(color: mode == 'AUTO'
                   ? const Color(0xFF00E5FF)
                   : const Color(0xFF666680), width: 1),
-              borderRadius: BorderRadius.circular(4),
+              borderRadius: BorderRadius.circular(r.sp(4)),
             ),
             child: Text(mode, style: TextStyle(
               color: mode == 'AUTO' ? const Color(0xFF00E5FF) : const Color(0xFF888899),
-              fontSize: 11,
+              fontSize: r.sp(11),
               letterSpacing: 3,
               fontFamily: 'monospace',
               fontWeight: FontWeight.w600,
             )),
           ),
           const Spacer(),
-          // MRM warning
           if (isMrm)
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              padding: EdgeInsets.symmetric(horizontal: r.w(10), vertical: r.h(4)),
               decoration: BoxDecoration(
                 color: const Color(0x33FF3D57),
                 border: Border.all(color: const Color(0xFFFF3D57), width: 1),
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.circular(r.sp(4)),
               ),
-              child: const Text('⚠ MRM ACTIVE', style: TextStyle(
-                color: Color(0xFFFF3D57),
-                fontSize: 11,
+              child: Text('\u26A0 MRM ACTIVE', style: TextStyle(
+                color: const Color(0xFFFF3D57),
+                fontSize: r.sp(11),
                 letterSpacing: 2,
                 fontFamily: 'monospace',
                 fontWeight: FontWeight.w700,
               )),
             ),
           const Spacer(),
-          // Frame counter
-          Text('# ${seq.toString().padLeft(6, '0')}', style: const TextStyle(
-            color: Color(0x44FFFFFF),
-            fontSize: 10,
+          Text('# ${seq.toString().padLeft(6, '0')}', style: TextStyle(
+            color: const Color(0x44FFFFFF),
+            fontSize: r.sp(10),
             letterSpacing: 1,
             fontFamily: 'monospace',
           )),
@@ -209,8 +199,6 @@ class _TopBar extends StatelessWidget {
   }
 }
 
-// ── Speedometer ───────────────────────────────────────────────────────────────
-
 class _Speedometer extends StatelessWidget {
   final double speed;
   final int turnSignal;
@@ -218,21 +206,20 @@ class _Speedometer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
     return LayoutBuilder(builder: (context, constraints) {
       final size = math.min(constraints.maxWidth, constraints.maxHeight) * 0.85;
       return Stack(
         alignment: Alignment.center,
         children: [
-          // Arc painter
           SizedBox(
             width: size, height: size,
             child: CustomPaint(painter: _ArcPainter(speed: speed, maxSpeed: 180)),
           ),
-          // Speed number
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const SizedBox(height: 24),
+              SizedBox(height: r.h(24)),
               Text(
                 speed.toStringAsFixed(0),
                 style: const TextStyle(
@@ -243,21 +230,20 @@ class _Speedometer extends StatelessWidget {
                   height: 1,
                 ),
               ),
-              const Text('km/h', style: TextStyle(
-                color: Color(0x88FFFFFF),
-                fontSize: 13,
+              Text('km/h', style: TextStyle(
+                color: const Color(0x88FFFFFF),
+                fontSize: r.sp(13),
                 letterSpacing: 3,
                 fontFamily: 'monospace',
               )),
-              const SizedBox(height: 8),
-              // Turn signal indicators
+              SizedBox(height: r.h(8)),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.arrow_back_ios, size: 16,
+                  Icon(Icons.arrow_back_ios, size: r.iconXs,
                       color: turnSignal == 1 ? const Color(0xFF00FF88) : const Color(0x22FFFFFF)),
-                  const SizedBox(width: 8),
-                  Icon(Icons.arrow_forward_ios, size: 16,
+                  SizedBox(width: r.w(8)),
+                  Icon(Icons.arrow_forward_ios, size: r.iconXs,
                       color: turnSignal == 2 ? const Color(0xFF00FF88) : const Color(0x22FFFFFF)),
                 ],
               ),
@@ -281,7 +267,6 @@ class _ArcPainter extends CustomPainter {
     const startAngle = math.pi * 0.75;
     const sweepAngle = math.pi * 1.5;
 
-    // Track
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius),
       startAngle, sweepAngle, false,
@@ -292,7 +277,6 @@ class _ArcPainter extends CustomPainter {
         ..strokeCap = StrokeCap.round,
     );
 
-    // Fill
     final fill = (speed / maxSpeed).clamp(0.0, 1.0);
     if (fill > 0) {
       final gradient = SweepGradient(
@@ -312,7 +296,6 @@ class _ArcPainter extends CustomPainter {
       );
     }
 
-    // Tick marks
     for (int i = 0; i <= 9; i++) {
       final angle = startAngle + sweepAngle * (i / 9);
       final isMajor = i % 3 == 0;
@@ -327,8 +310,6 @@ class _ArcPainter extends CustomPainter {
   @override
   bool shouldRepaint(_ArcPainter old) => old.speed != speed;
 }
-
-// ── Info row ──────────────────────────────────────────────────────────────────
 
 class _InfoRow extends StatelessWidget {
   final VehicleFrame frame;
@@ -361,19 +342,20 @@ class _InfoTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(value, style: TextStyle(
           color: accent,
-          fontSize: 22,
+          fontSize: r.sp(22),
           fontWeight: FontWeight.w300,
           fontFamily: 'monospace',
         )),
-        const SizedBox(height: 2),
-        Text(label, style: const TextStyle(
-          color: Color(0x55FFFFFF),
-          fontSize: 9,
+        SizedBox(height: r.h(2)),
+        Text(label, style: TextStyle(
+          color: const Color(0x55FFFFFF),
+          fontSize: r.sp(9),
           letterSpacing: 2,
           fontFamily: 'monospace',
         )),
@@ -382,44 +364,39 @@ class _InfoTile extends StatelessWidget {
   }
 }
 
-// ── Bottom strip ──────────────────────────────────────────────────────────────
-
 class _BottomStrip extends StatelessWidget {
   final VehicleFrame frame;
   const _BottomStrip({required this.frame});
 
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
     final hasRed = frame.adas.trafficLightRed;
     final hasGreen = frame.adas.trafficLightGreen;
     final hasYellow = frame.adas.trafficLightYellow;
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      margin: EdgeInsets.symmetric(horizontal: r.w(20)),
+      padding: EdgeInsets.symmetric(horizontal: r.w(16), vertical: r.h(10)),
       decoration: BoxDecoration(
         color: const Color(0x0FFFFFFF),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(r.sp(8)),
         border: Border.all(color: const Color(0x15FFFFFF)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Speed limit
           _Strip(label: 'LIMIT',
               value: '${(frame.speedLimitMps * 3.6).toStringAsFixed(0)} km/h'),
-          // Target speed
           _Strip(label: 'TARGET',
               value: '${(frame.targetSpeedMps * 3.6).toStringAsFixed(0)} km/h'),
-          // Traffic lights
           Row(children: [
             _TrafficDot(color: const Color(0xFFFF3D57), active: hasRed),
-            const SizedBox(width: 4),
+            SizedBox(width: r.w(4)),
             _TrafficDot(color: const Color(0xFFFFB800), active: hasYellow),
-            const SizedBox(width: 4),
+            SizedBox(width: r.w(4)),
             _TrafficDot(color: const Color(0xFF00FF88), active: hasGreen),
           ]),
-          // Distance
           _Strip(label: 'DIST',
               value: '${(frame.eta.remainingDistanceM / 1000).toStringAsFixed(2)} km'),
         ],
@@ -434,19 +411,20 @@ class _Strip extends StatelessWidget {
   const _Strip({required this.label, required this.value});
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(value, style: const TextStyle(
+        Text(value, style: TextStyle(
           color: Colors.white,
-          fontSize: 13,
+          fontSize: r.sp(13),
           fontFamily: 'monospace',
           fontWeight: FontWeight.w400,
         )),
-        Text(label, style: const TextStyle(
-          color: Color(0x44FFFFFF),
-          fontSize: 8,
+        Text(label, style: TextStyle(
+          color: const Color(0x44FFFFFF),
+          fontSize: r.sp(8),
           letterSpacing: 2,
           fontFamily: 'monospace',
         )),
@@ -461,12 +439,13 @@ class _TrafficDot extends StatelessWidget {
   const _TrafficDot({required this.color, required this.active});
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
     return Container(
-      width: 10, height: 10,
+      width: r.w(10), height: r.h(10),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: active ? color : color.withOpacity(0.15),
-        boxShadow: active ? [BoxShadow(color: color.withOpacity(0.6), blurRadius: 6)] : null,
+        boxShadow: active ? [BoxShadow(color: color.withOpacity(0.6), blurRadius: r.sp(6))] : null,
       ),
     );
   }

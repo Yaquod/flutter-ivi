@@ -3,6 +3,7 @@ import 'package:flutter_ivi/widgets/car_card.dart';
 import 'package:flutter_ivi/features/map/map_card.dart';
 import 'package:flutter_ivi/widgets/music_card.dart';
 import 'package:flutter_ivi/widgets/weather_card.dart';
+import 'package:flutter_ivi/widgets/responsive_layout.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, required this.onMapTap});
@@ -15,6 +16,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
+
     return Column(
       children: [
         Expanded(
@@ -22,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Expanded(flex: 1, child: CarCard()),
 
-              const SizedBox(width: 24),
+              SizedBox(width: r.w(24)),
 
               Expanded(
                 flex: 2,
@@ -30,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Expanded(flex: 5, child: MapCard(onTap: widget.onMapTap)),
 
-                    const SizedBox(height: 24),
+                    SizedBox(height: r.h(24)),
 
                     Expanded(
                       flex: 4,
@@ -38,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           Expanded(child: WeatherCard()),
 
-                          const SizedBox(width: 24),
+                          SizedBox(width: r.w(24)),
 
                           Expanded(child: MusicCard()),
                         ],

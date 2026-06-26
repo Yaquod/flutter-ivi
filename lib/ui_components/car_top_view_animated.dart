@@ -3,9 +3,7 @@ import 'package:flutter_ivi/ui_components/lock_button.dart';
 import 'package:flutter_ivi/ui_components/door_rect.dart';
 import 'package:flutter_ivi/ui_components/car_body_painter.dart';
 import 'package:flutter_ivi/screens/car_screen_door.dart';
-
-
-
+import 'package:flutter_ivi/widgets/responsive_layout.dart';
 
 class CarTopView extends StatelessWidget {
   final Map<DoorPosition, DoorState> doors;
@@ -22,32 +20,28 @@ class CarTopView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
+
     return Center(
       child: SizedBox(
-        width: 320,
-        height: 520,
+        width: r.w(320),
+        height: r.h(520),
         child: Stack(
           alignment: Alignment.center,
           children: [
 
-            // car body shape 
             Positioned.fill(
             child :CustomPaint(
-           
               painter: CarBodyPainter(),
             ),),
 
-
-
-            // door rect and lock button
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
 
-                // front door rect and lock door 
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 24, 0, 0),
+                    padding: r.edgeInsetsOnly(l: 0, t: 24, r: 0, b: 0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -55,22 +49,22 @@ class CarTopView extends StatelessWidget {
                           isLocked: doors[DoorPosition.driverFront]!.isLocked,
                           onTap: () => onToggleLock(DoorPosition.driverFront),
                         ),
-                    
-                        const SizedBox(width: 6),
+
+                        SizedBox(width: r.w(6)),
                         Expanded(
                           child: DoorRect(
                             isSelected: selected == DoorPosition.driverFront,
                             onTap: () => onSelectDoor(DoorPosition.driverFront),
                           ),
                         ),
-                        const SizedBox(width: 6),
+                        SizedBox(width: r.w(6)),
                         Expanded(
                           child: DoorRect(
                             isSelected: selected == DoorPosition.passengerFront,
                             onTap: () => onSelectDoor(DoorPosition.passengerFront),
                           ),
                         ),
-                        const SizedBox(width: 6),
+                        SizedBox(width: r.w(6)),
                         LockIconButton(
                           isLocked: doors[DoorPosition.passengerFront]!.isLocked,
                           onTap: () => onToggleLock(DoorPosition.passengerFront),
@@ -80,12 +74,9 @@ class CarTopView extends StatelessWidget {
                   ),
                 ),
 
-                //const SizedBox(height: 8),
-
-                 // rear door rect and lock door 
-                Expanded(
+                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 24),
+                    padding: r.edgeInsetsOnly(l: 0, t: 0, r: 0, b: 24),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -93,21 +84,21 @@ class CarTopView extends StatelessWidget {
                           isLocked: doors[DoorPosition.driverRear]!.isLocked,
                           onTap: () => onToggleLock(DoorPosition.driverRear),
                         ),
-                        const SizedBox(width: 6),
+                        SizedBox(width: r.w(6)),
                         Expanded(
                           child: DoorRect(
                             isSelected: selected == DoorPosition.driverRear,
                             onTap: () => onSelectDoor(DoorPosition.driverRear),
                           ),
                         ),
-                        const SizedBox(width: 6),
+                        SizedBox(width: r.w(6)),
                         Expanded(
                           child: DoorRect(
                             isSelected: selected == DoorPosition.passengerRear,
                             onTap: () => onSelectDoor(DoorPosition.passengerRear),
                           ),
                         ),
-                        const SizedBox(width: 6),
+                        SizedBox(width: r.w(6)),
                         LockIconButton(
                           isLocked: doors[DoorPosition.passengerRear]!.isLocked,
                           onTap: () => onToggleLock(DoorPosition.passengerRear),
@@ -126,6 +117,3 @@ class CarTopView extends StatelessWidget {
     );
   }
 }
-
-
-

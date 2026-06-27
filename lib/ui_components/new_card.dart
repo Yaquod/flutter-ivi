@@ -26,7 +26,7 @@ class GlassCard extends StatelessWidget {
         child: ClipRRect(
           borderRadius: borderRadius,
           child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+            filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: borderRadius,
@@ -71,9 +71,9 @@ final rrect = borderRadius.toRRect(
       canvas: canvas,
       rrect: rrect,
       rect: rect,
-      globalOpacity: 0.5,
+      globalOpacity: 0.3,
       center: Alignment(-0.8, -0.8),
-      radius: 10.0,
+      radius: 5.0,
       color: Color(0xFF0938DF),
       opacity: 1.0,
     );
@@ -83,9 +83,9 @@ final rrect = borderRadius.toRRect(
       canvas: canvas,
       rrect: rrect,
       rect: rect,
-      globalOpacity: 0.5,
+      globalOpacity: 0.3,
       center: Alignment(0.8, 0.8),
-      radius: 10.0,
+      radius: 5.0,
       color: AppColor.action_color,
       opacity: 1.0,
     );
@@ -96,8 +96,8 @@ final rrect = borderRadius.toRRect(
       rrect: rrect,
       rect: rect,
       globalOpacity: 0.3,
-      center: Alignment(-0.8, -0.8),
-      radius: 10.0,
+      center: Alignment(-0.5, -0.5),
+      radius: 5.0,
       color: Color(0xFFFFFFFF),
       opacity: 1.0,
     );
@@ -108,8 +108,8 @@ final rrect = borderRadius.toRRect(
       rrect: rrect,
       rect: rect,
       globalOpacity: 0.3,
-      center: Alignment(0.8, 0.8),
-      radius: 10.0,
+      center: Alignment(0.5, 0.5),
+      radius: 5.0,
       color: Color(0xFFFFFFFF),
       opacity: 1.0,
     );

@@ -14,8 +14,9 @@ class BottomNav extends StatelessWidget {
         _buildNavItem(Icons.home_filled, 0),
         _buildNavItem(Icons.directions_car_filled, 1),
         _buildNavItem(Icons.location_on, 2),
-        _buildNavItem(Icons.apps_sharp, 3),
-        _buildNavItem(Icons.settings_sharp, 4),
+        _buildNavItem(Icons.smart_toy_outlined, 3),
+        _buildNavItem(Icons.apps_sharp, 4),
+        _buildNavItem(Icons.settings_sharp, 5),
       ],
     );
   }

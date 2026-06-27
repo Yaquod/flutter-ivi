@@ -47,6 +47,11 @@ dependencies:
   geolocator: ^12.0.0
   flutter_svg: ^2.0.9
   flutter_screenutil: ^5.9.3
+  filament_scene:
+    git:
+      url: https://github.com/toyota-connected/tcna-packages.git
+      ref: v2.0
+      path: packages/filament_scene
 
 
 dev_dependencies:
@@ -76,6 +81,7 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/models/robotaxi/
     
 
   # An image asset can refer to one or more resolution-specific "variants", see

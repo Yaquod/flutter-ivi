@@ -7,6 +7,7 @@ import 'package:flutter_ivi/screens/car_screen.dart';
 import 'package:flutter_ivi/screens/home_screen.dart';
 import 'package:flutter_ivi/screens/map_screen.dart';
 import 'package:flutter_ivi/screens/settings_screen.dart';
+import 'package:flutter_ivi/features/robotaxi/screens/robotaxi_screen.dart';
 import 'package:flutter_ivi/ui_components/app_background.dart';
 
 class MainScreen extends StatefulWidget {
@@ -33,6 +34,7 @@ class _MainScreenState extends State<MainScreen> {
       ),
       const CarScreen(),
       const MapScreen(),
+      const RobotaxiScreen(),
       const AppsScreen(),
       const SettingsScreen(),
     ];

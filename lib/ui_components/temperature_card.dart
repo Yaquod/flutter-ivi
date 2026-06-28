@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ivi/constants/app_color.dart';
 import 'package:flutter_ivi/ui_components/new_card.dart';
+import 'package:flutter_ivi/widgets/responsive_layout.dart';
 
 class CircleIconButton extends StatefulWidget {
   final IconData icon;
@@ -20,6 +21,7 @@ class _CircleIconButtonState extends State<CircleIconButton> {
   @override
   Widget build(BuildContext context) {
     final Color iconColor = AppColor.icon_dark_white;
+      final r = ResponsiveLayout.of(context);
 
     return GestureDetector(
       onTap: widget.onTap,

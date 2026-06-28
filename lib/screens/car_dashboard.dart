@@ -50,31 +50,3 @@ Widget build(BuildContext context) {
 }
 }
 
-// class SeatPage extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Center(
-//       child: Text("Seat Controls"),
-//     );
-//   }
-// }
-
-
-// class DoorsPage extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Center(
-//       child: Text("Door Controls"),
-//     );
-//   }
-// }
-
-
-// class CarPage extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Center(
-//       child: Text("Car Controls"),
-//     );
-//   }
-// }

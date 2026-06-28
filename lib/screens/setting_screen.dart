@@ -4,6 +4,7 @@ import 'package:flutter_ivi/screens/setting_display_screen.dart';
 import 'package:flutter_ivi/screens/setting_sound_screen.dart';
 import 'package:flutter_ivi/screens/setting_connectivity_screen.dart';
 import 'package:flutter_ivi/screens/setting_system_screen.dart';
+import 'package:flutter_ivi/widgets/responsive_layout.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({super.key});
@@ -24,10 +25,12 @@ class SettingScreenState extends State<SettingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
+
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      padding: EdgeInsets.symmetric(horizontal: r.w(24), vertical: r.h(16)),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // ── Side Menu ─────────────────────────────────────────────────
           SideMenu(
@@ -36,13 +39,13 @@ class SettingScreenState extends State<SettingScreen> {
             onChanged: (index) => setState(() => _selectedIndex = index),
           ),
 
-          const SizedBox(width: 16),
+          SizedBox(width: r.w(24)),
 
           // ── Content area with IndexedStack ────────────────────────────
           Expanded(
             child: IndexedStack(
               index: _selectedIndex,
-              children:  [
+              children: [
                 SettingDisplayScreen(),
                 SettingSoundScreen(),
                 SettingConnectivityScreen(),

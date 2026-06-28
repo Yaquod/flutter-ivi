@@ -5,38 +5,50 @@ import 'package:flutter_ivi/ui_components/setting_slider.dart';
 import 'package:flutter_ivi/ui_components/toggle.dart';
 import 'package:flutter_ivi/ui_components/dropdown.dart';
 import 'package:flutter_ivi/ui_components/setting_card.dart';
+import 'package:flutter_ivi/widgets/responsive_layout.dart';
 
 // ─── Title + subtitle label for setting rows ────────────────────────────────
 class SettingLabel extends StatelessWidget {
   final String title;
   final String subtitle;
+  final MainAxisAlignment mainAxisAlignment;
 
   const SettingLabel({
     super.key,
     required this.title,
     required this.subtitle,
+    this.mainAxisAlignment = MainAxisAlignment.center,
   });
 
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: mainAxisAlignment,
+
       children: [
-        Text(
-          title,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: Colors.white,
+        Padding(
+          padding: EdgeInsets.fromLTRB(r.sp(0), r.sp(0), r.sp(0), r.sp(0)),
+          child: Text(
+            title,
+            style: TextStyle(
+              fontSize: r.sp(32),
+              fontWeight: FontWeight.w400,
+              color: Colors.white,
+            ),
           ),
         ),
-        const SizedBox(height: 2),
-        Text(
-          subtitle,
-          style: TextStyle(
-            fontSize: 12,
-            color: Colors.white.withOpacity(0.45),
+        SizedBox(height: r.h(4)),
+        Padding(
+          padding: EdgeInsets.fromLTRB(r.sp(0), r.sp(0), r.sp(0), r.sp(0)),
+          child: Text(
+            subtitle,
+            style: TextStyle(
+              fontSize: r.sp(20),
+              fontWeight: FontWeight.w300,
+              color: Colors.white.withOpacity(0.45),
+            ),
           ),
         ),
       ],
@@ -52,6 +64,7 @@ class SliderSettingCard extends StatelessWidget {
   final ValueChanged<double> onChanged;
   final double min;
   final double max;
+  final double h;
 
   const SliderSettingCard({
     super.key,
@@ -61,21 +74,27 @@ class SliderSettingCard extends StatelessWidget {
     required this.onChanged,
     this.min = 0.0,
     this.max = 1.0,
+    this.h = 230,
   });
 
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
+
     return GlassCard(
-      width: double.infinity,
-      height: 80,
-    //  padding: const EdgeInsets.fromLTRB(20, 14, 20, 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SettingLabel(title: title, subtitle: subtitle),
-          const SizedBox(height: 8),
-          IviSlider(value: value, onChanged: onChanged, min: min, max: max),
-        ],
+      width: r.w(700),
+      height: r.h(h),
+      //  padding: const EdgeInsets.fromLTRB(20, 14, 20, 10),
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(r.sp(48), r.sp(32), r.sp(48), r.sp(0)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SettingLabel(title: title, subtitle: subtitle),
+            SizedBox(height: r.h(24)),
+            IviSlider(value: value, onChanged: onChanged, min: min, max: max),
+          ],
+        ),
       ),
     );
   }
@@ -103,7 +122,9 @@ class ToggleSettingCard extends StatelessWidget {
       height: 80,
       child: Row(
         children: [
-          Expanded(child: SettingLabel(title: title, subtitle: subtitle)),
+          Expanded(
+            child: SettingLabel(title: title, subtitle: subtitle),
+          ),
           IviToggle(value: value, onChanged: onChanged),
         ],
       ),
@@ -130,14 +151,20 @@ class DropdownSettingCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
     return GlassCard(
-      width: double.infinity,
-      height: 80,
-      child: Row(
-        children: [
-          Expanded(child: SettingLabel(title: title, subtitle: subtitle)),
-          IviDropdown(value: value, items: items, onChanged: onChanged),
-        ],
+      width: r.w(700),
+      height: r.h(200),
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(r.sp(48), r.sp(0), r.sp(48), r.sp(0)),
+        child: Row(
+          children: [
+            Expanded(
+              child: SettingLabel(title: title, subtitle: subtitle),
+            ),
+            IviDropdown(value: value, items: items, onChanged: onChanged),
+          ],
+        ),
       ),
     );
   }
@@ -171,10 +198,7 @@ class SettingSectionHeader extends StatelessWidget {
         const SizedBox(height: 4),
         Text(
           subtitle,
-          style: TextStyle(
-            fontSize: 13,
-            color: Colors.white.withOpacity(0.4),
-          ),
+          style: TextStyle(fontSize: 13, color: Colors.white.withOpacity(0.4)),
         ),
       ],
     );

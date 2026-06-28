@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import '../providers/vehicle_provider.dart';
 import '../proto/vehicle_frame.pb.dart';
 import '../widgets/responsive_layout.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:math' as math;
 
 class ClusterScreen extends StatelessWidget {

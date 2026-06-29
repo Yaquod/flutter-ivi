@@ -16,12 +16,12 @@ class CircleIconButton extends StatefulWidget {
 class _CircleIconButtonState extends State<CircleIconButton> {
   bool _isHovered = false;
 
+  static const double size = 50.0;
+
   @override
   Widget build(BuildContext context) {
-    final r = ResponsiveLayout.of(context);
-    final size = r.w(50);
-
     final Color iconColor = AppColor.icon_dark_white;
+      final r = ResponsiveLayout.of(context);
 
     return GestureDetector(
       onTap: widget.onTap,
@@ -33,13 +33,19 @@ class _CircleIconButtonState extends State<CircleIconButton> {
           height: size,
           child: Stack(
             children: [
-
-                 GlassCard(
-                  width: size,
-                  height: size,
-                  borderRadius: size / 2,
+              //base for circle button
+              GlassCard(
+                width: size,
+                height: size,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(size / 2),
+                  topRight: Radius.circular(size / 2),
+                  bottomLeft: Radius.circular(size / 2),
+                  bottomRight: Radius.circular(size / 2),
+                ),
               ),
 
+              //hovered state layer
               if (_isHovered)
                 Container(
                   decoration: BoxDecoration(
@@ -148,24 +154,31 @@ class _TemperatureCardState extends State<TemperatureCard> {
         ),
       ),
 
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: r.w(8)),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween , 
-          children: [
 
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        //wrap left temp row , right temp row and cooling icon
+        child: Row(
+          //   mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+          children: [
+            //left row that wrap left minus , left plus , left temp
             Expanded(
-              flex : 5,
+              flex: 5,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  // ── Left: minus ───────────────────────────────────
                   CircleIconButton(
                     icon: Icons.remove,
                     onTap: () => _adjustTemp(true, false),
                   ),
 
+                  // ── Left temp value ───────────────────────────────
                   TempDisplay(temperature: _leftTemp),
 
+                  // ── Left: plus ────────────────────────────────────
                   CircleIconButton(
                     icon: Icons.add,
                     onTap: () => _adjustTemp(true, true),
@@ -174,22 +187,32 @@ class _TemperatureCardState extends State<TemperatureCard> {
               ),
             ),
 
+            //cooling icon
             Expanded(
-              flex: 3 ,
-              child: Icon(Icons.ac_unit, color: AppColor.action_color, size: r.iconMd)),
+              flex: 3,
+              child: Icon(
+                Icons.ac_unit,
+                color: AppColor.action_color,
+                size: 36,
+              ),
+            ),
 
-             Expanded(
-                flex : 5,
+            //right row that wrap right minus , right plus , right temp
+            Expanded(
+              flex: 5,
               child: Row(
-                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  // ── Right: minus ──────────────────────────────────
                   CircleIconButton(
                     icon: Icons.remove,
                     onTap: () => _adjustTemp(false, false),
                   ),
 
+                  // ── Right temp value ──────────────────────────────
                   TempDisplay(temperature: _rightTemp),
 
+                  // ── Right: plus ───────────────────────────────────
                   CircleIconButton(
                     icon: Icons.add,
                     onTap: () => _adjustTemp(false, true),

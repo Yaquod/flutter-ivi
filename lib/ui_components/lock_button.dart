@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ivi/constants/app_color.dart';
 import 'package:flutter_ivi/ui_components/new_card.dart';
+import 'package:flutter_ivi/widgets/responsive_layout.dart';
 
 class LockIconButton extends StatefulWidget {
   final bool isLocked;
@@ -17,56 +18,43 @@ class LockIconButtonState extends State<LockIconButton> {
 
   @override
   Widget build(BuildContext context) {
-    //icon color
+    final r = ResponsiveLayout.of(context);
+    final s = r.sp(48);
     final Color iconColor = widget.isLocked
-        ? AppColor
-              .action_color //pressed
-        : AppColor.icon_dark_gray; //default
+        ? AppColor.action_color
+        : AppColor.icon_dark_gray;
+
     return GestureDetector(
       onTap: widget.onTap,
-
       child: MouseRegion(
         onEnter: (_) => setState(() => _isHovered = true),
         onExit: (_) => setState(() => _isHovered = false),
-
         child: Stack(
           alignment: Alignment.center,
           children: [
-            //default state
             GlassCard(
-              width: 48,
-              height: 48,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(48),
-                topRight: Radius.circular(48),
-                bottomLeft: Radius.circular(48),
-                bottomRight: Radius.circular(48),
-              ),
+              width: s,
+              height: s,
+              borderRadius: BorderRadius.all(Radius.circular(s / 2)),
             ),
-
-            //icon
             Icon(
               widget.isLocked ? Icons.lock : Icons.lock_open,
               color: iconColor,
-              size: 22,
+              size: r.sp(22),
             ),
-
-            // hover state
             if (_isHovered || widget.isLocked)
               Container(
-                width: 48,
-                height: 48,
+                width: s,
+                height: s,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(color: AppColor.action_color, width: 1),
                 ),
               ),
-
-            //pressed state
             if (widget.isLocked)
               Container(
-                width: 48,
-                height: 48,
+                width: s,
+                height: s,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: AppColor.action_color.withOpacity(0.1),

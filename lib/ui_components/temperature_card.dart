@@ -16,12 +16,11 @@ class CircleIconButton extends StatefulWidget {
 class _CircleIconButtonState extends State<CircleIconButton> {
   bool _isHovered = false;
 
-  static const double size = 50.0;
-
   @override
   Widget build(BuildContext context) {
     final Color iconColor = AppColor.icon_dark_white;
-      final r = ResponsiveLayout.of(context);
+    final r = ResponsiveLayout.of(context);
+    final s = r.sp(50);
 
     return GestureDetector(
       onTap: widget.onTap,
@@ -29,20 +28,14 @@ class _CircleIconButtonState extends State<CircleIconButton> {
         onEnter: (_) => setState(() => _isHovered = true),
         onExit: (_) => setState(() => _isHovered = false),
         child: SizedBox(
-          width: size,
-          height: size,
+          width: s,
+          height: s,
           child: Stack(
             children: [
-              //base for circle button
               GlassCard(
-                width: size,
-                height: size,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(size / 2),
-                  topRight: Radius.circular(size / 2),
-                  bottomLeft: Radius.circular(size / 2),
-                  bottomRight: Radius.circular(size / 2),
-                ),
+                width: s,
+                height: s,
+                borderRadius: BorderRadius.all(Radius.circular(s / 2)),
               ),
 
               //hovered state layer
@@ -193,7 +186,7 @@ class _TemperatureCardState extends State<TemperatureCard> {
               child: Icon(
                 Icons.ac_unit,
                 color: AppColor.action_color,
-                size: 36,
+                size: r.sp(36),
               ),
             ),
 

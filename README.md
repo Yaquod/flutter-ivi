@@ -41,8 +41,12 @@ source ${FLUTTER_WORKSPACE}/setup_env.sh
 In the same terminal (with the Flutter environment sourced), navigate to the app and run:
 
 ```bash
-flutter run -d desktop-homescreen
+VIDEO_PLAYER_AUDIO_SINK=fakesink flutter run -d desktop-homescreen
 ```
+
+`VIDEO_PLAYER_AUDIO_SINK=fakesink` is required to prevent a SIGSEGV crash when Spotify
+Canvas videos transition between songs. See [`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md)
+for the full run command (including `LD_PRELOAD` for the CEF WebView plugin).
 
 To open in VS Code for debugging:
 
@@ -74,6 +78,22 @@ Run the agent with map configuration:
 ```
 
 The gRPC server can run on localhost or inside a VM / separate hypervisor domain, depending on your SDV setup.
+
+## Features
+
+- **Digital Cluster** — live speed, gear, battery, and ADAS telemetry from Autoware via gRPC
+- **Spotify Integration** — now-playing, Canvas video backgrounds, playback controls, QR OAuth login
+- **Navigation** — turn-by-turn overlay on the cluster display
+- **Settings** — sound, display, and system preferences panels
+- **Responsive UI** — scales to any resolution; base design at 1920×1080
+
+## Documentation
+
+| Doc | Contents |
+|---|---|
+| [`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md) | Build, run, CEF setup, env vars |
+| [`docs/SPOTIFY.md`](docs/SPOTIFY.md) | Spotify Canvas, spotifyd, Cloudflare relay |
+| [`docs/DYNAMIC_THEME.md`](docs/DYNAMIC_THEME.md) | Album-art palette theming |
 
 ## License
 

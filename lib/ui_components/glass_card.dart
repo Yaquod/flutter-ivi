@@ -15,43 +15,6 @@ class GlassCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // return Container(
-    //   decoration: BoxDecoration(
-    //     borderRadius: borderRadius,
-
-    //     gradient: LinearGradient(
-    //       begin: Alignment.topLeft,
-    //       end: Alignment.bottomRight,
-    //       colors: [Colors.white, Colors.transparent,Colors.transparent,Colors.white,],
-    //       // stops: [0, 0.2,0.90, 1]
-    //     ),
-    //   ),
-
-    //   padding: const EdgeInsets.all(1),
-
-    //   child: ClipRRect(
-    //     borderRadius: borderRadius,
-
-    //     child: BackdropFilter(
-    //       filter: ImageFilter.blur(sigmaX: 42, sigmaY: 42),
-    //       child: Container(
-    //         decoration: BoxDecoration(
-    //           borderRadius: borderRadius,
-
-    //           gradient: LinearGradient(
-    //       begin: Alignment.topLeft,
-    //       end: Alignment.bottomRight,
-    //       colors: [Colors.white.withValues(alpha: 0.4), Colors.transparent],
-    //     ),
-    //         ),
-
-    //         padding: padding,
-    //         child: child,
-    //       ),
-    //     ),
-    //   ),
-    // );
-
     return Container(
       decoration: BoxDecoration(
         borderRadius: borderRadius,

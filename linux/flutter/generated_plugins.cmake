@@ -3,6 +3,8 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  video_player_linux
+  webview_flutter_linux
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST

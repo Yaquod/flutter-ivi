@@ -48,3 +48,11 @@ app.*.map.json
 
 # Add your private environment variables here
 .env.codex
+.env
+
+# Ad-hoc setup notes (kept as docs/*.md only)
+*.txt
+!**/CMakeLists.txt
+
+# External automation workspace
+.gclient

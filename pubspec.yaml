@@ -41,12 +41,23 @@ dependencies:
   google_fonts: ^8.0.2
   intl: ^0.20.2
   flutter_dotenv: ^6.0.0
+  http: ^1.6.0
+  crypto: ^3.0.6
+  webview_flutter: ^4.10.0
+  webview_flutter_linux:
+    path: /home/wafdy/workspace-automation/app/tcna-packages/packages/webview/webview_flutter_linux
   connectivity_plus: ^7.0.0
   flutter_map: ^7.0.2
   latlong2: ^0.9.1
   geolocator: ^12.0.0
   flutter_svg: ^2.0.9
   flutter_screenutil: ^5.9.3
+  qr_flutter: ^4.1.0
+  palette_generator: ^0.3.3
+  video_player: ^2.9.2
+  video_player_linux:
+    path: /home/wafdy/workspace-automation/app/tcna-packages/packages/video_player/video_player_linux
+  video_player_platform_interface: ">=6.1.0 <7.0.0"
 
 
 dev_dependencies:
@@ -74,7 +85,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    #- .env
+    - .env
     - assets/images/
     - assets/icons/
     

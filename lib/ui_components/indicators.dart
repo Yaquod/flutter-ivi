@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ivi/constants/app_color.dart';
+import 'package:flutter_ivi/widgets/responsive_layout.dart';
 
 class TurnSignalIndicator extends StatefulWidget {
   final int turnSignal; // 0=none 1=left 2=right
@@ -40,7 +41,6 @@ class _TurnSignalIndicatorState extends State<TurnSignalIndicator>
   }
 }
 
-
 class _Arrow extends StatelessWidget {
   final AnimationController blink;
   final bool active;
@@ -50,6 +50,7 @@ class _Arrow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
     const blue = AppColor.action_color;
 
     return AnimatedBuilder(
@@ -60,17 +61,17 @@ class _Arrow extends StatelessWidget {
 
         return AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          width: 50,
-          height: 40,
+          width: r.w(50),
+          height: r.h(40),
           decoration: BoxDecoration(
             border: Border.all(color: color, width: 1.5),
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(r.radiusSm),
             color: active ? blue.withOpacity(blink.value * 0.12) : Colors.transparent,
           ),
           child: Icon(
             left ? Icons.arrow_back_ios_new_sharp : Icons.arrow_forward_ios_sharp,
             color: color,
-            size: 24,
+            size: r.sp(24),
           ),
         );
       },

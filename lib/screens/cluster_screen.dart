@@ -10,8 +10,6 @@ import '../providers/vehicle_provider.dart';
 import '../proto/vehicle_frame.pb.dart';
 import '../widgets/responsive_layout.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'dart:math' as math;
-
 class ClusterScreen extends StatelessWidget {
   const ClusterScreen({super.key});
 
@@ -42,19 +40,19 @@ class _LoadingView extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             SizedBox(
-              width: 48,
-              height: 48,
+              width: r.sp(48),
+              height: r.sp(48),
               child: CircularProgressIndicator(
                 strokeWidth: 2,
                 color: Color(0xFF00E5FF),
               ),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: r.h(20)),
             Text(
               'CONNECTING',
               style: TextStyle(
                 color: Color(0xFF00E5FF),
-                fontSize: 11,
+                fontSize: r.fontXs,
                 letterSpacing: 4,
                 fontFamily: 'monospace',
               ),
@@ -78,23 +76,23 @@ class _ErrorView extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.link_off, color: Color(0xFFFF3D57), size: 40),
-            const SizedBox(height: 16),
-            const Text(
+            Icon(Icons.link_off, color: Color(0xFFFF3D57), size: r.sp(40)),
+            SizedBox(height: r.h(16)),
+            Text(
               'CONNECTION LOST',
               style: TextStyle(
                 color: Color(0xFFFF3D57),
-                fontSize: 11,
+                fontSize: r.fontXs,
                 letterSpacing: 4,
                 fontFamily: 'monospace',
               ),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: r.h(8)),
             Text(
               message,
-              style: const TextStyle(
+              style: TextStyle(
                 color: Color(0x66FFFFFF),
-                fontSize: 11,
+                fontSize: r.fontXs,
                 fontFamily: 'monospace',
               ),
               textAlign: TextAlign.center,
@@ -115,14 +113,6 @@ class ClusterView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final r = ResponsiveLayout.of(context);
-    final speed = frame.velocity.speedKmh;
-    final gear = _gearLabel(frame.gear.value);
-    final mode = frame.controlMode.name.replaceFirst('MODE_', '');
-    final battery = frame.batteryPct;
-    final isMrm = frame.mrm.isActive;
-    final turnSignal = frame.turnSignal.value; // 0=none 1=left 2=right
-
-    final control_mode = frame.controlMode.value;
 
     return Scaffold(
       backgroundColor: const Color(0xFF0A0A0F),
@@ -144,10 +134,9 @@ class ClusterView extends StatelessWidget {
 
             //road
             Positioned(
-              top: 300,
+              top: r.h(300),
               left: 0,
               right: 0,
-
               child: Image.asset('assets/images/road.png', fit: BoxFit.cover),
             ),
 
@@ -161,15 +150,15 @@ class ClusterView extends StatelessWidget {
 
             //left , right indicators
             Positioned(
-              top: 60,
-              left: 350,
-              right: 350,
+              top: r.h(60),
+              left: r.w(350),
+              right: r.w(350),
               child: TurnSignalIndicator(turnSignal: 2),
             ),
-            
+
             //navigation message
             Positioned(
-              top: 140,
+              top: r.h(140),
               left: 0,
               right: 0,
               child: Center(
@@ -181,54 +170,59 @@ class ClusterView extends StatelessWidget {
             ),
 
             //speed
-            Positioned(top: 140, left: 120, child: build_display(127, 'KM/H')),
+            Positioned(
+              top: r.h(140),
+              left: r.w(120),
+              child: build_display(r, 127, 'KM/H'),
+            ),
 
             //energy
-            Positioned(top: 140, right: 120, child: build_display(3.4, 'KM/H')),
+            Positioned(
+              top: r.h(140),
+              right: r.w(120),
+              child: build_display(r, 3.4, 'KM/H'),
+            ),
 
             //middle car
             Positioned(
-              bottom: 120,
+              bottom: r.h(120),
               left: 0,
               right: 0,
-
               child: Center(
                 child: Image.asset(
                   'assets/images/car_middle.png',
-                  width: 160,
-                  height: 130,
+                  width: r.w(160),
+                  height: r.h(130),
                 ),
               ),
             ),
 
             //truck
             Positioned(
-              bottom: 240,
-              right: 260,
-
+              bottom: r.h(240),
+              right: r.w(260),
               child: Image.asset(
                 'assets/images/truck.png',
-                width: 200,
-                height: 160,
+                width: r.w(200),
+                height: r.h(160),
               ),
             ),
 
             //left car
             Positioned(
-              bottom: 240,
-              left: 300,
-
+              bottom: r.h(240),
+              left: r.w(300),
               child: Image.asset(
                 'assets/images/left_car.png',
-                width: 154,
-                height: 90,
+                width: r.w(154),
+                height: r.h(90),
               ),
             ),
 
             //left card information
             Positioned(
-              left: 24,
-              bottom: 100,
+              left: r.w(24),
+              bottom: r.h(100),
               child: LeftCardInfo(
                 acc: 4.03,
                 max_speed: 80,
@@ -239,8 +233,8 @@ class ClusterView extends StatelessWidget {
 
             //right card information
             Positioned(
-              right: 24,
-              bottom: 100,
+              right: r.w(24),
+              bottom: r.h(100),
               child: RightCarfIngo(
                 eta_distance: 300,
                 eta_time: 200,
@@ -251,9 +245,9 @@ class ClusterView extends StatelessWidget {
 
             //bottom bar
             Positioned(
-              bottom: 16,
-              left: 24,
-              right: 24,
+              bottom: r.h(16),
+              left: r.w(24),
+              right: r.w(24),
               child: Center(
                 child: BottomBar(
                   battery: 86,
@@ -274,20 +268,6 @@ class ClusterView extends StatelessWidget {
     );
   }
 
-  String _gearLabel(int v) {
-    switch (v) {
-      case 1:
-        return 'P';
-      case 2:
-        return 'R';
-      case 3:
-        return 'N';
-      case 4:
-        return 'D';
-      default:
-        return '—';
-    }
-  }
 }
 
 // top bar
@@ -298,95 +278,77 @@ class TopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
     return Stack(
       children: [
         Stack(
           children: [
             GlassCard(
-              width: 1243,
-              height: 40,
+              width: r.w(1243),
+              height: r.h(40),
               borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(100),
-                bottomRight: Radius.circular(100),
+                bottomLeft: Radius.circular(r.sp(100)),
+                bottomRight: Radius.circular(r.sp(100)),
               ),
-
-
-              child : Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 48),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: r.w(48)),
                 child: Row(
-                
                   children: [
-
-                     //time 
+                    //time
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.baseline,
                       textBaseline: TextBaseline.alphabetic,
                       children: [
-                        //time value 
                         Text(
                           '12:15',
                           style: TextStyle(
                             color: AppColor.primary_text_dark,
                             fontFamily: 'Nasalization',
-                            fontSize: 16,
+                            fontSize: r.sp(16),
                           ),
                         ),
-
-                     SizedBox(width: 4),
-                      //unit
-                     Text(
-                      'AM',
-                      style: TextStyle(
-                        color : AppColor.primary_text_dark,
-                        fontFamily: 'inter',
-                        fontSize: 10,
-                      ),
-                     )
+                        SizedBox(width: r.w(4)),
+                        Text(
+                          'AM',
+                          style: TextStyle(
+                            color: AppColor.primary_text_dark,
+                            fontFamily: 'inter',
+                            fontSize: r.sp(10),
+                          ),
+                        ),
                       ],
                     ),
 
-                  Spacer(),
+                    Spacer(),
 
-                    //temerature
+                    //temperature
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.baseline,
                       textBaseline: TextBaseline.alphabetic,
                       children: [
-                       //temerature vale 
                         Text(
                           '27',
                           style: TextStyle(
                             color: AppColor.primary_text_dark,
                             fontFamily: 'Nasalization',
-                            fontSize: 16,
+                            fontSize: r.sp(16),
                           ),
                         ),
-
-                        SizedBox(width: 4),
-                        //unit
+                        SizedBox(width: r.w(4)),
                         Text(
                           'C',
                           style: TextStyle(
                             color: AppColor.primary_text_dark,
                             fontFamily: 'Nasalization',
-                            fontSize: 16,
+                            fontSize: r.sp(16),
                           ),
                         ),
                       ],
-                    )
-
-
-
-                     
-                
-                
-                
-                
+                    ),
                   ],
                 ),
-              )
+              ),
             ),
-        
           ],
         ),
 
@@ -395,18 +357,14 @@ class TopBar extends StatelessWidget {
             Align(
               alignment: Alignment.center,
               child: GlassCard(
-                width: 400,
-                height: 70,
+                width: r.w(400),
+                height: r.h(70),
                 borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(100),
-                bottomRight: Radius.circular(100),
+                  bottomLeft: Radius.circular(r.sp(100)),
+                  bottomRight: Radius.circular(r.sp(100)),
+                ),
+                child: Center(child: GearSelector(activeLetter: gear)),
               ),
-
-                child : 
-                Center(child: GearSelector(activeLetter:gear)),
-              ),
-
-              
             ),
           ],
         ),
@@ -419,8 +377,7 @@ class TopBar extends StatelessWidget {
 class BottomBar extends StatelessWidget {
   final double battery;
   final int control_mode; //(AUTO = 2 /MANUAL = 1 /NONE = 0)
-  final int
-  motion_state; //(STOPPED = 1 /MOVING = 2 /DECELERATING = 3 /NONE = 0)
+  final int motion_state; //(STOPPED = 1 /MOVING = 2 /DECELERATING = 3 /NONE = 0)
   final int car_count;
   final int obstacle_count;
   final int pedstrain_count;
@@ -443,11 +400,12 @@ class BottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
     return GlassCard(
-      height: 60,
-      width: 1400,
+      height: r.h(60),
+      width: r.w(1400),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
+        padding: EdgeInsets.symmetric(horizontal: r.w(24)),
         child: Row(
           children: [
             //left row
@@ -455,11 +413,11 @@ class BottomBar extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  build_battery(),
-                  const SizedBox(width: 48),
-                  build_control_mode(control_mode),
-                  const SizedBox(width: 48),
-                  build_motion_state(motion_state),
+                  build_battery(r),
+                  SizedBox(width: r.w(48)),
+                  build_control_mode(r, control_mode),
+                  SizedBox(width: r.w(48)),
+                  build_motion_state(r, motion_state),
                 ],
               ),
             ),
@@ -471,24 +429,11 @@ class BottomBar extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  //car count
-                  build_icon('assets/icons/car.svg', 25, 20, car_count),
-                  SizedBox(width: 30),
-                  //obstacle count
-                  build_icon(
-                    'assets/icons/obstacle.svg',
-                    25,
-                    20,
-                    obstacle_count,
-                  ),
-                  SizedBox(width: 30),
-                  //pedstrain count
-                  build_icon(
-                    'assets/icons/pedstrain.svg',
-                    25,
-                    20,
-                    pedstrain_count,
-                  ),
+                  build_icon(r, 'assets/icons/car.svg', car_count),
+                  SizedBox(width: r.w(30)),
+                  build_icon(r, 'assets/icons/obstacle.svg', obstacle_count),
+                  SizedBox(width: r.w(30)),
+                  build_icon(r, 'assets/icons/pedstrain.svg', pedstrain_count),
                 ],
               ),
             ),
@@ -498,67 +443,60 @@ class BottomBar extends StatelessWidget {
     );
   }
 
-  Row build_icon(String icon_path, double icon_w, double icon_h, int count) {
+  Row build_icon(ResponsiveLayout r, String icon_path, int count) {
     return Row(
       children: [
-        //car icon
         SvgPicture.asset(
-          '$icon_path',
-          width: icon_w,
-          height: icon_h,
+          icon_path,
+          width: r.w(25),
+          height: r.h(20),
           colorFilter: ColorFilter.mode(
             AppColor.icon_dark_white,
             BlendMode.srcIn,
           ),
         ),
-
-        //vertical line
         Container(
-          height: 20,
+          height: r.h(20),
           child: VerticalDivider(color: AppColor.action_color, thickness: 1),
         ),
-
-        //car count
         Text(
           '$count',
           style: TextStyle(
             color: AppColor.action_color,
             fontFamily: 'Nasalization',
-            fontSize: 18,
+            fontSize: r.sp(18),
           ),
         ),
       ],
     );
   }
 
-  Row build_battery() {
+  Row build_battery(ResponsiveLayout r) {
     return Row(
       children: [
-        //battery icon
         SvgPicture.asset(
           'assets/icons/battery.svg',
-          width: 50,
-          height: 30,
+          width: r.w(50),
+          height: r.h(30),
           colorFilter: ColorFilter.mode(
             AppColor.icon_dark_white,
             BlendMode.srcIn,
           ),
         ),
-        SizedBox(width: 4),
-        //battery level
+        SizedBox(width: r.w(4)),
         Text(
           '$battery%',
           style: TextStyle(
             color: AppColor.icon_dark_white,
             fontFamily: 'Nasalization',
-            fontSize: 14,
+            fontSize: r.fontSm,
           ),
         ),
       ],
     );
   }
 
-  Text build_control_mode(int v) {
+  Text build_control_mode(ResponsiveLayout r, int v) {
     String mode = '';
     switch (v) {
       case 1:
@@ -571,17 +509,17 @@ class BottomBar extends StatelessWidget {
         mode = '';
     }
     return Text(
-      '$mode',
+      mode,
       style: TextStyle(
         color: AppColor.action_color,
         fontFamily: 'inter',
-        fontSize: 16,
+        fontSize: r.sp(16),
         fontWeight: FontWeight.w500,
       ),
     );
   }
 
-  Row build_motion_state(int v) {
+  Row build_motion_state(ResponsiveLayout r, int v) {
     String motion = '';
     switch (v) {
       case 1:
@@ -601,18 +539,16 @@ class BottomBar extends StatelessWidget {
         if (v == 1 || v == 2 || v == 3)
           SvgPicture.asset(
             'assets/icons/blue_filled_circle.svg',
-            width: 20,
-            height: 20,
+            width: r.sp(20),
+            height: r.sp(20),
           ),
-
-        SizedBox(width: 8),
-
+        SizedBox(width: r.w(8)),
         Text(
-          '$motion',
+          motion,
           style: TextStyle(
             color: AppColor.action_color,
             fontFamily: 'inter',
-            fontSize: 16,
+            fontSize: r.sp(16),
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -622,7 +558,6 @@ class BottomBar extends StatelessWidget {
 }
 
 //right card information
-
 class RightCarfIngo extends StatelessWidget {
   final double eta_distance;
   final double eta_time;
@@ -638,29 +573,24 @@ class RightCarfIngo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
     return GlassCard(
-      width: 200,
-      height: 350,
+      width: r.w(200),
+      height: r.h(350),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(24, 24, 0, 0),
+        padding: EdgeInsets.fromLTRB(r.w(24), r.h(24), 0, 0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              child: build_info('Estimated Distance', eta_distance, 'm'),
+              child: build_info(r, 'Estimated Distance', eta_distance, 'm'),
             ),
-
-            build_light_line(),
-
-            Expanded(child: build_info('Estimated Time', eta_time, 's')),
-
-            build_light_line(),
-
-            Expanded(child: build_info('Odometer', odometer, 'm')),
-
-            build_light_line(),
-
-            Expanded(child: build_info('MRM', mrm, '')),
+            build_light_line(r),
+            Expanded(child: build_info(r, 'Estimated Time', eta_time, 's')),
+            build_light_line(r),
+            Expanded(child: build_info(r, 'Odometer', odometer, 'm')),
+            build_light_line(r),
+            Expanded(child: build_info(r, 'MRM', mrm, '')),
           ],
         ),
       ),
@@ -669,7 +599,6 @@ class RightCarfIngo extends StatelessWidget {
 }
 
 // left card information
-
 class LeftCardInfo extends StatelessWidget {
   final double acc;
   final double target_speed;
@@ -686,27 +615,22 @@ class LeftCardInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final r = ResponsiveLayout.of(context);
     return GlassCard(
-      width: 200,
-      height: 350,
+      width: r.w(200),
+      height: r.h(350),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(24, 24, 0, 0),
+        padding: EdgeInsets.fromLTRB(r.w(24), r.h(24), 0, 0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Expanded(child: build_info('Acceleration', acc, 'KM/H')),
-
-            build_light_line(),
-
-            Expanded(child: build_info('Target Speed', target_speed, 'm/s')),
-
-            build_light_line(),
-
-            Expanded(child: build_info('Max Speed', max_speed, 'm/s')),
-
-            build_light_line(),
-
-            Expanded(child: build_info('Yaw Rate', yaw_rate, 'Rad/s')),
+            Expanded(child: build_info(r, 'Acceleration', acc, 'KM/H')),
+            build_light_line(r),
+            Expanded(child: build_info(r, 'Target Speed', target_speed, 'm/s')),
+            build_light_line(r),
+            Expanded(child: build_info(r, 'Max Speed', max_speed, 'm/s')),
+            build_light_line(r),
+            Expanded(child: build_info(r, 'Yaw Rate', yaw_rate, 'Rad/s')),
           ],
         ),
       ),
@@ -714,30 +638,30 @@ class LeftCardInfo extends StatelessWidget {
   }
 }
 
-Image build_light_line() {
+Image build_light_line(ResponsiveLayout r) {
   return Image.asset(
     'assets/images/light_line.png',
-    width: 180,
-    height: 20,
+    width: r.w(180),
+    height: r.h(20),
     fit: BoxFit.fitWidth,
   );
 }
 
-Column build_info(String label, dynamic value, String unit) {
+Column build_info(
+    ResponsiveLayout r, String label, dynamic value, String unit) {
   return Column(
     mainAxisAlignment: MainAxisAlignment.start,
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Text(
-        '$label',
+        label,
         style: TextStyle(
           color: AppColor.secondary_text_dark,
-          fontSize: 14,
+          fontSize: r.fontSm,
           fontFamily: 'inter',
           fontWeight: FontWeight.w200,
         ),
       ),
-
       Row(
         crossAxisAlignment: CrossAxisAlignment.baseline,
         textBaseline: TextBaseline.alphabetic,
@@ -747,18 +671,16 @@ Column build_info(String label, dynamic value, String unit) {
             style: TextStyle(
               color: AppColor.action_color,
               fontFamily: 'Nasalization',
-              fontSize: 20,
+              fontSize: r.sp(20),
             ),
           ),
-
-          SizedBox(width: 4),
-
+          SizedBox(width: r.w(4)),
           Text(
-            '$unit',
+            unit,
             style: TextStyle(
               color: AppColor.secondary_text_dark,
               fontFamily: 'inter',
-              fontSize: 12,
+              fontSize: r.sp(12),
               fontWeight: FontWeight.w200,
             ),
           ),
@@ -768,30 +690,26 @@ Column build_info(String label, dynamic value, String unit) {
   );
 }
 
-//speed  and energy
-
-Row build_display(double val, String unit) {
+//speed and energy display
+Row build_display(ResponsiveLayout r, double val, String unit) {
   return Row(
     crossAxisAlignment: CrossAxisAlignment.baseline,
     textBaseline: TextBaseline.alphabetic,
     children: [
-      //value
       Text(
         '$val',
         style: TextStyle(
           color: AppColor.primary_text_dark,
           fontFamily: 'Nasalization',
-          fontSize: 70,
+          fontSize: r.sp(70),
         ),
       ),
-
-      //unit
       Text(
-        '$unit',
+        unit,
         style: TextStyle(
           color: AppColor.secondary_text_dark,
           fontFamily: 'inter',
-          fontSize: 15,
+          fontSize: r.sp(15),
           fontWeight: FontWeight.w200,
         ),
       ),

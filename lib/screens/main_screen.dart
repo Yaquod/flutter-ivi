@@ -25,11 +25,8 @@ class _MainScreenState extends State<MainScreen> {
 
     final List<Widget> pages = [
       HomeScreen(
-        onMapTap: () {
-          setState(() {
-            _currentIndex = 2;
-          });
-        },
+        onMapTap: () => setState(() => _currentIndex = 2),
+        onMusicTap: () => setState(() => _currentIndex = 3),
       ),
       const CarScreen(),
       const MapScreen(),

@@ -44,7 +44,7 @@ class SettingSoundScreenState extends State<SettingSoundScreen> {
                       title: 'Sound & Audio',
                       subtitle: 'Manage audio settings and preferences',
                     ),
-                    const SizedBox(height: 48),
+                    SizedBox(height: r.h(48)),
 
                     // Media Volume slider
                     SliderSettingCard(
